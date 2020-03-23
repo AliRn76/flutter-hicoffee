@@ -15,27 +15,27 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Item>sample = [
     Item(
       imageUrl: "assets/images/item0.png",
-      category: "Coffee bean",
+      category: "دونه قهوه",
     ),
     Item(
       imageUrl: "assets/images/item1.png",
-      category: "Mug",
+      category: "ماگ",
     ),
     Item(
       imageUrl: "assets/images/item2.png",
-      category: "Spresso",
+      category: "نوشیدنی",
     ),
     Item(
       imageUrl: "assets/images/item3.png",
-      category: "Chocolate",
+      category: "شکلات",
     ),
     Item(
       imageUrl: "assets/images/item0.png",
-      category: "Mug",
+      category: "وسایل",
     ),
     Item(
       imageUrl: "assets/images/item0.png",
-      category: "Other",
+      category: "غیره",
     ),
   ];
 
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 30.0, 10.0),
+              padding: EdgeInsets.fromLTRB(10.0, 30.0, 30.0, 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -63,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(
                       fontFamily: "BTitr_Bold",
                       fontSize: 27.0,
-                      fontWeight: FontWeight.w600,
                     ),
                   )
                 ],
@@ -71,6 +70,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(height: 20.0),
+//          Row(
+//            mainAxisAlignment: MainAxisAlignment.end,
+//            children: <Widget>[
+//              Text(
+//                "دسته بندی ها",
+//                style: TextStyle(
+//                  fontFamily: "BNazanin_outline",
+//                  fontSize: 24,
+//                  fontWeight: FontWeight.w400,
+//                ),
+//              ),
+//            ],
+//          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
@@ -82,22 +94,53 @@ class _HomeScreenState extends State<HomeScreen> {
                           pageBuilder: (_, __, ___) => CategoryScreen(category: sample[0].category)
                       )),
                   child: Container(
-                    height: 120.0,
+//                    height: 120.0,
+                    height: 55.0,
                     width: 150.0,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xAFFD1D1D), Color(0xAFEC4065)],
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.lightBlue[50],
+//                      boxShadow: [
+//                        BoxShadow(
+//                          blurRadius: 10.0,
+////                          color: Colors.lightBlue[50],
+////                          color: Colors.white,
+//                        ),
+//                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 10.0,
+                          top: 10.0,
+                          child: Icon(
+                            FontAwesomeIcons.coffee,
+                            size: 30.0,
+                          ),
+                        ),
+                        Positioned(
+                          right: 1.0,
+                          top: 20.0,
+                          child: Text(
+                            "دونه قهوه",
+                            style: TextStyle(
+                              fontSize: 21.0,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "BTitr_Bold",
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    child: Image(
-                      image: AssetImage(sample[0].imageUrl),
-                      height: 120.0,
-                      width: 150.0,
-                    ),
+//                    child: Image(
+//                      image: AssetImage(sample[0].imageUrl),
+//                      height: 120.0,
+//                      width: 150.0,
+//                    ),
                   ),
                 ),
                 GestureDetector(
@@ -106,21 +149,50 @@ class _HomeScreenState extends State<HomeScreen> {
                           pageBuilder: (_, __, ___) => CategoryScreen(category: sample[1].category)
                       )),
                   child: Container(
-                    height: 120.0,
+                    height: 55.0,
                     width: 150.0,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xAFEC4065), Color(0xAFE1306C)],
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.lightBlue[50],
+//                      boxShadow: [
+//                        BoxShadow(
+//                          blurRadius: 10.0,
+//                          color: Colors.lightBlue[50],
+//                        ),
+//                      ],
+                    ),
+//                    child: Image(
+//                      image: AssetImage(sample[1].imageUrl),
+//                      height: 120.0,
+//                      width: 150.0,
+//                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 10.0,
+                          top: 10.0,
+                          child: Icon(
+                            FontAwesomeIcons.coffee,
+                            size: 30.0,
+                          ),
+                        ),
+                        Positioned(
+                          right: 20.0,
+                          top: 20.0,
+                          child: Text(
+                            "ماگ",
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "BTitr_Bold",
+                            ),
+                          ),
                         ),
                       ],
-                    ),
-                    child: Image(
-                      image: AssetImage(sample[1].imageUrl),
-                      height: 120.0,
-                      width: 150.0,
                     ),
                   ),
                 ),
@@ -139,22 +211,51 @@ class _HomeScreenState extends State<HomeScreen> {
                           pageBuilder: (_, __, ___) => CategoryScreen(category: sample[2].category)
                       )),
                   child: Container(
-                    height: 120.0,
+                    height: 55.0,
                     width: 150.0,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xAFE1306C), Color(0xAFC13584)],
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.lightBlue[50],
+//                      boxShadow: [
+//                        BoxShadow(
+//                          blurRadius: 10.0,
+//                          color: Colors.lightBlue[50],
+//                        ),
+//                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 10.0,
+                          top: 10.0,
+                          child: Icon(
+                            FontAwesomeIcons.mugHot,
+                            size: 31.0,
+                          ),
+                        ),
+                        Positioned(
+                          right: 20.0,
+                          top: 20.0,
+                          child: Text(
+                            "نوشیدنی",
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "BTitr_Bold",
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    child: Image(
-                      image: AssetImage(sample[2].imageUrl),
-                      height: 120.0,
-                      width: 150.0,
-                    ),
+//                    child: Image(
+//                      image: AssetImage(sample[2].imageUrl),
+//                      height: 120.0,
+//                      width: 150.0,
+//                    ),
                   ),
                 ),
                 GestureDetector(
@@ -163,22 +264,51 @@ class _HomeScreenState extends State<HomeScreen> {
                           pageBuilder: (_, __, ___) => CategoryScreen(category: sample[3].category)
                       )),
                   child: Container(
-                    height: 120.0,
+                    height: 55.0,
                     width: 150.0,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xAFC13584), Color(0xAF833AB4)],
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.lightBlue[50],
+//                      boxShadow: [
+//                        BoxShadow(
+//                          blurRadius: 10.0,
+//                          color: Colors.lightBlue[50],
+//                        ),
+//                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 10.0,
+                          top: 10.0,
+                          child: Icon(
+                            FontAwesomeIcons.mugHot,
+                            size: 31.0,
+                          ),
+                        ),
+                        Positioned(
+                          right: 20.0,
+                          top: 20.0,
+                          child: Text(
+                            "شکلات",
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "BTitr_Bold",
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    child: Image(
-                      image: AssetImage(sample[3].imageUrl),
-                      height: 120.0,
-                      width: 150.0,
-                    ),
+//                    child: Image(
+//                      image: AssetImage(sample[3].imageUrl),
+//                      height: 120.0,
+//                      width: 150.0,
+//                    ),
                   ),
                 ),
               ],
@@ -196,22 +326,51 @@ class _HomeScreenState extends State<HomeScreen> {
                           pageBuilder: (_, __, ___) => CategoryScreen(category: sample[4].category)
                       )),
                   child: Container(
-                    height: 120.0,
+                    height: 55.0,
                     width: 150.0,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xAFC13584), Color(0xAF5851DB)],
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.lightBlue[50],
+//                      boxShadow: [
+//                        BoxShadow(
+//                          blurRadius: 10.0,
+//                          color: Colors.lightBlue[50],
+//                        ),
+//                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 10.0,
+                          top: 10.0,
+                          child: Icon(
+                            FontAwesomeIcons.blender,
+                            size: 31.0,
+                          ),
+                        ),
+                        Positioned(
+                          right: 20.0,
+                          top: 20.0,
+                          child: Text(
+                            "وسایل",
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "BTitr_Bold",
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    child: Image(
-                      image: AssetImage(sample[4].imageUrl),
-                      height: 120.0,
-                      width: 150.0,
-                    ),
+//                    child: Image(
+//                      image: AssetImage(sample[4].imageUrl),
+//                      height: 120.0,
+//                      width: 150.0,
+//                    ),
                   ),
                 ),
                 GestureDetector(
@@ -220,28 +379,57 @@ class _HomeScreenState extends State<HomeScreen> {
                           pageBuilder: (_, __, ___) => CategoryScreen(category: sample[5].category)
                       )),
                   child: Container(
-                    height: 120.0,
+                    height: 55.0,
                     width: 150.0,
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xAF5851DB), Color(0xAF405DE6)],
+                      ),
                       borderRadius: BorderRadius.circular(15.0),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Colors.lightBlue[50],
+//                      boxShadow: [
+//                        BoxShadow(
+//                          blurRadius: 10.0,
+//                          color: Colors.lightBlue[50],
+//                        ),
+//                      ],
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          left: 10.0,
+                          top: 10.0,
+                          child: Icon(
+                            FontAwesomeIcons.beer,
+                            size: 31.0,
+                          ),
+                        ),
+                        Positioned(
+                          right: 20.0,
+                          top: 20.0,
+                          child: Text(
+                            "غیره",
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "BTitr_Bold",
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    child: Image(
-                      image: AssetImage(sample[5].imageUrl),
-                      height: 120.0,
-                      width: 150.0,
-                    ),
+//                    child: Image(
+//                      image: AssetImage(sample[5].imageUrl),
+//                      height: 120.0,
+//                      width: 150.0,
+//                    ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 40.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
