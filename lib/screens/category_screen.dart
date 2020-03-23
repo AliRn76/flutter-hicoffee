@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hicoffee2/models/item_model.dart';
+
+import 'item_screen.dart';
 
 class CategoryScreen extends StatefulWidget {
   // Catch Category
@@ -150,10 +153,126 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
           }
 
-          return Text(
-            item.name,
+          return GestureDetector(
+            onTap: () => Navigator.push(context,
+                PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => ItemScreen(item: item)
+                )),
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(50.0, 20.0, 15.0, 0.0),
+                  child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Container(
+                      height: 100.0,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6.0,
+                            offset: Offset(0.0, 2.0),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(30.0, 15.0, 10.0, 10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Container(
+//                                color: Colors.red,
+                                  width: 140.0,
+                                  child: Text(
+                                    "${item.name}",
+                                    style: TextStyle(
+                                      fontFamily: "BNazanin",
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Text(
+                                  "تعداد: ",
+                                  style: TextStyle(
+                                    fontFamily: "BNazanin",
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Text(
+                                  "${item.number}",
+                                  style: TextStyle(
+                                    fontFamily: "BNazanin",
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: <Widget>[
+                                SizedBox(width: 70.0),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "قیمت: ",
+                                      style: TextStyle(
+                                        fontFamily: "BNazanin",
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${item.price}",
+                                      style: TextStyle(
+                                        fontFamily: "BNazanin",
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15.0, 27.0, 15.0, 0.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(25.0),
+                    child: Image(
+                      image: AssetImage("${item.imageUrl}"),
+                      height: 86.0,
+                      width: 110.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blueAccent[100],
       ),
 //      ListView(
 //        children: <Widget>[
