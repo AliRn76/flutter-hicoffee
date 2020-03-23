@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:hicoffee2/animations/slide_right_route.dart';
+import 'package:hicoffee2/animations/slide_left_route.dart';
+
 import 'package:hicoffee2/models/item_model.dart';
+
 import 'package:hicoffee2/screens/category_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  // ignore: non_constant_identifier_names
   List<Item>category_detail = [
     Item(
       imageUrl: "assets/images/item0.png",
@@ -69,49 +76,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SizedBox(height: 20.0),
-//          Row(
-//            mainAxisAlignment: MainAxisAlignment.end,
-//            children: <Widget>[
-//              Text(
-//                "دسته بندی ها",
-//                style: TextStyle(
-//                  fontFamily: "BNazanin_outline",
-//                  fontSize: 24,
-//                  fontWeight: FontWeight.w400,
-//                ),
-//              ),
-//            ],
-//          ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => CategoryScreen(category: category_detail[0].category)
-                        )),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: CategoryScreen(category: category_detail[0].category))
+                    ),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
-//                    height: 120.0,
                         height: 55.0,
                         width: 150.0,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [Color(0xAFFD1D1D), Color(0xAFEC4065)],
                           ),
-                          borderRadius: BorderRadius.circular(15.0),
-//                      boxShadow: [
-//                        BoxShadow(
-//                          blurRadius: 10.0,
-////                          color: Colors.lightBlue[50],
-////                          color: Colors.white,
-//                        ),
-//                      ],
                         ),
                         child: Stack(
                           children: <Widget>[
@@ -137,43 +122,26 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-//                    child: Image(
-//                      image: AssetImage(sample[0].imageUrl),
-//                      height: 120.0,
-//                      width: 150.0,
-//                    ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => CategoryScreen(category: category_detail[1].category)
-                        )),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: CategoryScreen(category: category_detail[1].category))
+                    ),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
                         height: 55.0,
                         width: 150.0,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [Color(0xAFEC4065), Color(0xAFE1306C)],
                           ),
-                          borderRadius: BorderRadius.circular(15.0),
-//                      boxShadow: [
-//                        BoxShadow(
-//                          blurRadius: 10.0,
-//                          color: Colors.lightBlue[50],
-//                        ),
-//                      ],
                         ),
-//                    child: Image(
-//                      image: AssetImage(sample[1].imageUrl),
-//                      height: 120.0,
-//                      width: 150.0,
-//                    ),
                         child: Stack(
                           children: <Widget>[
                             Positioned(
@@ -211,28 +179,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => CategoryScreen(category: category_detail[2].category)
-                        )),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: CategoryScreen(category: category_detail[2].category))
+                    ),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
                         height: 55.0,
                         width: 150.0,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [Color(0xAFE1306C), Color(0xAFC13584)],
                           ),
-                          borderRadius: BorderRadius.circular(15.0),
-//                      boxShadow: [
-//                        BoxShadow(
-//                          blurRadius: 10.0,
-//                          color: Colors.lightBlue[50],
-//                        ),
-//                      ],
                         ),
                         child: Stack(
                           children: <Widget>[
@@ -258,37 +219,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-//                    child: Image(
-//                      image: AssetImage(sample[2].imageUrl),
-//                      height: 120.0,
-//                      width: 150.0,
-//                    ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => CategoryScreen(category: category_detail[3].category)
-                        )),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: CategoryScreen(category: category_detail[3].category))
+                    ),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
                         height: 55.0,
                         width: 150.0,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [Color(0xAFC13584), Color(0xAF833AB4)],
                           ),
-                          borderRadius: BorderRadius.circular(15.0),
-//                      boxShadow: [
-//                        BoxShadow(
-//                          blurRadius: 10.0,
-//                          color: Colors.lightBlue[50],
-//                        ),
-//                      ],
                         ),
                         child: Stack(
                           children: <Widget>[
@@ -314,11 +263,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-//                    child: Image(
-//                      image: AssetImage(sample[3].imageUrl),
-//                      height: 120.0,
-//                      width: 150.0,
-//                    ),
                       ),
                     ),
                   ),
@@ -332,28 +276,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => CategoryScreen(category: category_detail[4].category)
-                        )),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: CategoryScreen(category: category_detail[4].category))
+                    ),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
                         height: 55.0,
                         width: 150.0,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [Color(0xAFC13584), Color(0xAF5851DB)],
                           ),
-                          borderRadius: BorderRadius.circular(15.0),
-//                      boxShadow: [
-//                        BoxShadow(
-//                          blurRadius: 10.0,
-//                          color: Colors.lightBlue[50],
-//                        ),
-//                      ],
                         ),
                         child: Stack(
                           children: <Widget>[
@@ -379,37 +316,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-//                    child: Image(
-//                      image: AssetImage(sample[4].imageUrl),
-//                      height: 120.0,
-//                      width: 150.0,
-//                    ),
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(context,
-                        PageRouteBuilder(
-                            pageBuilder: (_, __, ___) => CategoryScreen(category: category_detail[5].category)
-                        )),
+                    onTap: () => Navigator.push(
+                        context, SlideLeftRoute(page: CategoryScreen(category: category_detail[5].category))
+                    ),
                     child: Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
                         height: 55.0,
                         width: 150.0,
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
                           gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [Color(0xAF5851DB), Color(0xAF405DE6)],
                           ),
-                          borderRadius: BorderRadius.circular(15.0),
-//                      boxShadow: [
-//                        BoxShadow(
-//                          blurRadius: 10.0,
-//                          color: Colors.lightBlue[50],
-//                        ),
-//                      ],
                         ),
                         child: Stack(
                           children: <Widget>[
@@ -435,11 +360,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-//                    child: Image(
-//                      image: AssetImage(sample[5].imageUrl),
-//                      height: 120.0,
-//                      width: 150.0,
-//                    ),
                       ),
                     ),
                   ),
@@ -472,10 +392,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (BuildContext context, int index){
                     Item item = items[index];
                     return GestureDetector(
-                      onTap: () => Navigator.push(context,
-                          PageRouteBuilder(
-                              pageBuilder: (_, __, ___) => ItemScreen(item: item)
-                          )),
+//                      onTap: () => Navigator.push(
+//                          context, SlideRightRoute(page: ItemScreen(item: item))
+//                      ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ItemScreen(item: item)),
+                      ),
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                         child: Container(
@@ -555,3 +478,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+//TODO: Container haye category --> shadow behesh add beshe
+//TODO: font koodak, ezafe beshe
+//TODO: price ha string beshe , va 12000 --> 12,000 beshe
+//TODO: font weigh haye zire item haye por foroosh ha fix beshe

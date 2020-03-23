@@ -93,18 +93,18 @@ Item _equipmenttemBuilder(int index){
   return item;
 }
 
-//// Drink Item Builder
-//Item _drinkItemBuilder(int index){
-//  List<Item> _items = [];
-//  Item item;
-//  for (int i=0 ; i<items.length ; i++){
-//    if (items[i].category == "نوشیدنی") {
-//      _items.add(items[i]);
-//    }
-//  }
-//  item = _items[index];
-//  return item;
-//}
+// Other Item Builder
+Item _otherItemBuilder(int index){
+  List<Item> _items = [];
+  Item item;
+  for (int i=0 ; i<items.length ; i++){
+    if (items[i].category == "غیره") {
+      _items.add(items[i]);
+    }
+  }
+  item = _items[index];
+  return item;
+}
 
 
 
@@ -150,14 +150,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
             case "وسایل":
               item = _equipmenttemBuilder(index);
               break;
+            case "غیره":
+              item = _otherItemBuilder(index);
+              break;
 
           }
 
           return GestureDetector(
-            onTap: () => Navigator.push(context,
-                PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => ItemScreen(item: item)
-                )),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ItemScreen(item: item)),
+            ),
             child: Stack(
               children: <Widget>[
                 Padding(
@@ -201,20 +204,34 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Text(
-                                  "تعداد: ",
-                                  style: TextStyle(
-                                    fontFamily: "BNazanin",
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.w400,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.lightBlue[100],
+                                        width: 1,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "${item.number}",
-                                  style: TextStyle(
-                                    fontFamily: "BNazanin",
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.w600,
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "تعداد: ",
+                                        style: TextStyle(
+                                          fontFamily: "BNazanin",
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                      Text(
+                                        "${item.number}",
+                                        style: TextStyle(
+                                          fontFamily: "BNazanin",
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -222,25 +239,35 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             Row(
                               children: <Widget>[
                                 SizedBox(width: 70.0),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      "قیمت: ",
-                                      style: TextStyle(
-                                        fontFamily: "BNazanin",
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w400,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.pink[100],
+                                        width: 1,
                                       ),
                                     ),
-                                    Text(
-                                      "${item.price}",
-                                      style: TextStyle(
-                                        fontFamily: "BNazanin",
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w600,
+                                  ),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "قیمت: ",
+                                        style: TextStyle(
+                                          fontFamily: "BNazanin",
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        "${item.price}",
+                                        style: TextStyle(
+                                          fontFamily: "BNazanin",
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -272,7 +299,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           // Add your onPressed code here!
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.blueAccent[100],
+        backgroundColor: Colors.lightGreenAccent[100],
       ),
 //      ListView(
 //        children: <Widget>[
@@ -307,3 +334,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 }
+
+
+//TODO: beshe item add kard

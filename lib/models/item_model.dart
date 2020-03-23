@@ -5,6 +5,7 @@ class Item{
   String imageUrl;
   String name;
   String category;
+  String description;
   int number;
   int price;
 
@@ -14,6 +15,7 @@ class Item{
     this.number,
     this.price,
     this.category,
+    this.description,
   });
 }
 
