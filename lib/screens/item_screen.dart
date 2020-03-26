@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hicoffee2/models/item_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:hicoffee2/models/item_model.dart';
+
+import 'package:hicoffee2/wigets/item_detail.dart';
 
 class ItemScreen extends StatefulWidget {
   final Item item;
@@ -13,10 +16,11 @@ class ItemScreen extends StatefulWidget {
   _ItemScreenState createState() => _ItemScreenState();
 }
 
+
+
 class _ItemScreenState extends State<ItemScreen> {
 
-  int _currentValue = 2;
-
+  int _currentValue = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,7 @@ class _ItemScreenState extends State<ItemScreen> {
               Container(
                 height: MediaQuery.of(context).size.width-60,
                 width: double.infinity,
+
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
                   boxShadow: [
@@ -38,14 +43,18 @@ class _ItemScreenState extends State<ItemScreen> {
                     ),
                   ],
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30.0),
-                      bottomRight: Radius.circular(30.0)
-                  ),
-                  child: Image(
-                    image: AssetImage(widget.item.imageUrl),
-                    fit: BoxFit.cover,
+                child: Hero(
+                  tag: widget.item.imageUrl,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30.0),
+                        bottomRight: Radius.circular(30.0)
+                    ),
+                    child: Image(
+//                    image: AssetImage(widget.item.imageUrl),
+                      image: NetworkImage("http://al1.best:89${widget.item.imageUrl}"),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -76,11 +85,30 @@ class _ItemScreenState extends State<ItemScreen> {
                 ),
               ),
               Positioned(
+                bottom: 23.0,
+                right: 35.0,
+                child: Container(
+                  height: 30.0,
+                  width: 30.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 60.0,
+                          offset: Offset(7.0, 7.0)
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
                 bottom: 17.0,
                 right: 25.0,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: Text(
+                    // Item Category
                     widget.item.category,
                     style: TextStyle(
                       fontFamily: "BTitr_Bold",
@@ -122,112 +150,7 @@ class _ItemScreenState extends State<ItemScreen> {
             ],
           ),
           SizedBox(height: 20.0),
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Text(
-                  "${widget.item.name}",
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: "BNazanin",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 20.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.pink[100],
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                          "${widget.item.price}",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontFamily: "BNazanin",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                          " :قیمت",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontFamily: "BNazanin",
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0),
-                decoration: BoxDecoration(
-                  color: Colors.lightBlue[100],
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                          "${widget.item.number}",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontFamily: "BNazanin",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                          " :تعداد",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontFamily: "BNazanin",
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 00.0),
-                  height: 100.0,
-                  width: MediaQuery.of(context).size.width-20,
-                  decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 12.0, 0.0),
-                    child: Text(
-                      "از فلانی به قیمته ۱۰۰ تومن خریدم ، آدرسش توی خیابون سوم ، کوچه ی فلان ،گذاشتمش توی طبقه ی بالا",
-                      maxLines: 3,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
+          ItemDetail(item: widget.item),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -242,7 +165,7 @@ class _ItemScreenState extends State<ItemScreen> {
                       ),
                     ),
                     Positioned(
-                      left: 65.0,
+                      left: 50.0,
                       top: 15.0,
                       child: Container(
                         decoration: BoxDecoration(
@@ -252,10 +175,16 @@ class _ItemScreenState extends State<ItemScreen> {
                             width: 2,
                           ),
                         ),
-                        child: FlatButton(
+                        child: RaisedButton(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          elevation: 5.0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.black87),
+                          ),
+                          color: Colors.greenAccent[400],
                           onPressed: (){
-                            print("Forokhte shod");
+                            print("$_currentValue Forokhte shod");
                           },
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 5.0),
@@ -273,16 +202,20 @@ class _ItemScreenState extends State<ItemScreen> {
                       ),
                     ),
                     Positioned(
-                      right: 50.0,
-                      top: -39.0,
+                      right: 20.0,
+                      top: 10.0,
                       child: Container(
-                        child: NumberPicker.integer(
-                          scrollDirection: Axis.horizontal,
-                          initialValue: _currentValue,
-                          minValue: 1,
-                          maxValue: 100,
-                          onChanged: (newValue) =>
-                              setState(() => _currentValue = newValue)
+                        height: 50,
+                        child: NumberPicker.horizontal(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            border: Border.all(color: Colors.black26, width: 1.0, )
+                          ),
+                            initialValue: _currentValue,
+                            minValue: 1,
+                            maxValue: 100,
+                            onChanged: (newValue) =>
+                                setState(() => _currentValue = newValue)
                         ),
                       ),
                     ),
@@ -298,6 +231,5 @@ class _ItemScreenState extends State<ItemScreen> {
 }
 
 
-//TODO: behse az DB item catch kard
 //TODO: beshe edit kard
-//TODO: if bezare ke age comment nadasht , chizi neshonesh nade
+//TODO:

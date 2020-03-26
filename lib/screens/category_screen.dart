@@ -7,14 +7,15 @@ import 'item_screen.dart';
 class CategoryScreen extends StatefulWidget {
   // Catch Category
   final String category;
-  CategoryScreen({this.category});
+  final List<Item> items;
+  CategoryScreen({this.category, this.items});
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
 
 // Item Counter
-int itemsCounter(String category){
+int itemsCounter(String category, List<Item> items){
   List<Item> _items = [];
   int number;
 
@@ -28,7 +29,7 @@ int itemsCounter(String category){
 }
 
 // Mug Item Builder
-Item _mugItemBuilder(int index){
+Item _mugItemBuilder(int index, List<Item> items){
   List<Item> _items = [];
   Item item;
   for (int i=0 ; i<items.length ; i++){
@@ -41,7 +42,7 @@ Item _mugItemBuilder(int index){
 }
 
 // Bean Item Builder
-Item _beanItemBuilder(int index){
+Item _beanItemBuilder(int index, List<Item> items){
   List<Item> _items = [];
   Item item;
   for (int i=0 ; i<items.length ; i++){
@@ -55,7 +56,7 @@ Item _beanItemBuilder(int index){
 
 
 // Drink Item Builder
-Item _drinkItemBuilder(int index){
+Item _drinkItemBuilder(int index, List<Item> items){
   List<Item> _items = [];
   Item item;
   for (int i=0 ; i<items.length ; i++){
@@ -68,7 +69,7 @@ Item _drinkItemBuilder(int index){
 }
 
 // Chocolate Item Builder
-Item _chocolateItemBuilder(int index){
+Item _chocolateItemBuilder(int index, List<Item> items){
   List<Item> _items = [];
   Item item;
   for (int i=0 ; i<items.length ; i++){
@@ -81,7 +82,7 @@ Item _chocolateItemBuilder(int index){
 }
 
 // Equipment Item Builder
-Item _equipmenttemBuilder(int index){
+Item _equipmenttemBuilder(int index, List<Item> items){
   List<Item> _items = [];
   Item item;
   for (int i=0 ; i<items.length ; i++){
@@ -94,7 +95,7 @@ Item _equipmenttemBuilder(int index){
 }
 
 // Other Item Builder
-Item _otherItemBuilder(int index){
+Item _otherItemBuilder(int index, List<Item> items){
   List<Item> _items = [];
   Item item;
   for (int i=0 ; i<items.length ; i++){
@@ -131,27 +132,27 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
       ),
       body: ListView.builder(
-        itemCount: itemsCounter(widget.category),
+        itemCount: itemsCounter(widget.category, widget.items),
         itemBuilder: (BuildContext context, int index){
           Item item;
           switch(widget.category){
             case "ماگ":
-              item = _mugItemBuilder(index);
+              item = _mugItemBuilder(index, widget.items);
               break;
             case "دونه قهوه":
-              item = _beanItemBuilder(index);
+              item = _beanItemBuilder(index, widget.items);
               break;
             case "نوشیدنی":
-              item = _drinkItemBuilder(index);
+              item = _drinkItemBuilder(index, widget.items);
               break;
             case "شکلات":
-              item = _chocolateItemBuilder(index);
+              item = _chocolateItemBuilder(index, widget.items);
               break;
             case "وسایل":
-              item = _equipmenttemBuilder(index);
+              item = _equipmenttemBuilder(index, widget.items);
               break;
             case "غیره":
-              item = _otherItemBuilder(index);
+              item = _otherItemBuilder(index, widget.items);
               break;
 
           }
@@ -182,15 +183,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         ],
                       ),
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(30.0, 15.0, 10.0, 10.0),
+                        padding: EdgeInsets.fromLTRB(80.0, 15.0, 10.0, 10.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Container(
-//                                color: Colors.red,
                                   width: 140.0,
                                   child: Text(
                                     "${item.name}",
@@ -214,6 +215,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     ),
                                   ),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
                                         "تعداد: ",
@@ -237,6 +239,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               ],
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 SizedBox(width: 70.0),
                                 Container(
@@ -279,13 +282,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(15.0, 27.0, 15.0, 0.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(25.0),
-                    child: Image(
-                      image: AssetImage("${item.imageUrl}"),
-                      height: 86.0,
-                      width: 110.0,
-                      fit: BoxFit.cover,
+                  child: Hero(
+                    tag: item.imageUrl,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(25.0),
+                      child: Image(
+//                      image: AssetImage("${item.imageUrl}"),
+                        image: NetworkImage("http://al1.best:89${item.imageUrl}"),
+                        height: 86.0,
+                        width: 110.0,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -295,42 +302,18 @@ class _CategoryScreenState extends State<CategoryScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+//        elevation: 0.0,
+        tooltip: 'Toggle',
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+//          side: BorderSide(color: Colors.black87),
+        ),
         onPressed: () {
           // Add your onPressed code here!
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.lightGreenAccent[100],
+        backgroundColor: Colors.limeAccent[700],
       ),
-//      ListView(
-//        children: <Widget>[
-//          Padding(
-//            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-//            child: Container(
-//              decoration: BoxDecoration(
-//                color: Colors.white,
-//                borderRadius: BorderRadius.circular(10.0),
-//                boxShadow: [
-//                  BoxShadow(
-//                    color: Colors.black12,
-//                    blurRadius: 6.0,
-//                    offset: Offset(0.0, 2.0),
-//                  ),
-//                ],
-//              ),
-//
-//              height: 100.0,
-//              width: double.infinity,
-//              child: Row(
-//                children: <Widget>[
-//                  Text(
-//                    _mugItemBuilder(0).name,
-//                  ),
-//                ],
-//              ),
-//            ),
-//          ),
-//        ],
-//      ),
     );
   }
 }
