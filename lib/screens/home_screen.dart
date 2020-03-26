@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            HomeCategory(),
+            HomeCategory(getItems: widget.getItems,),
             SizedBox(height: 40.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
