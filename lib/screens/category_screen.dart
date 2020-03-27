@@ -301,19 +301,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-//        elevation: 0.0,
-        tooltip: 'Toggle',
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-//          side: BorderSide(color: Colors.black87),
-        ),
-        onPressed: () {
-          // Add your onPressed code here!
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.limeAccent[700],
-      ),
     );
   }
 }

@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:hicoffee2/models/item_model.dart';
+import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/wigets/home_category.dart';
 
@@ -28,9 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    for(int i=0 ; i<widget.getItems.length ; i++){
-      print(widget.getItems[i].imageUrl);
-    }
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -40,19 +40,35 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  IconButton(
-                    onPressed: (){
-                      print(widget.getItems[1].name);
-                    },
-                    icon: Icon(FontAwesomeIcons.chartLine),
-                    iconSize: 30.0,
-                    color: Colors.black87,
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: (){
+                          print(widget.getItems[1].name);
+                        },
+                        icon: Icon(FontAwesomeIcons.chartLine),
+                        iconSize: 30.0,
+                        color: Colors.indigo[300],
+                      ),
+                      SizedBox(width: 10.0),
+                      AddItemScreen(),
+                    ],
                   ),
-                  Text(
-                    "های کافی",
-                    style: TextStyle(
-                      fontFamily: "BTitr_Bold",
-                      fontSize: 27.0,
+                  Container(
+                    width: 100.0,
+                    child: Text(
+                      "های کافی",
+                      style: TextStyle(
+                        fontFamily: "BTitr_Bold",
+                        fontSize: 30.0,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(3.0, 3.0),
+                            blurRadius: 4.0,
+                            color: Colors.black38,
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ],
