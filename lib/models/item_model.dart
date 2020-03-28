@@ -1,6 +1,6 @@
 
 class Item{
-  String imageUrl;
+  String image_url;
   String name;
   String category;
   String description;
@@ -8,7 +8,7 @@ class Item{
   int price;
 
   Item({
-    this.imageUrl,
+    this.image_url,
     this.name,
     this.category,
     this.description,
@@ -17,7 +17,7 @@ class Item{
   });
 
   Item.fromJson(Map<String, dynamic> json)
-      : imageUrl = json['imageUrl'],
+      : image_url = json['image_url'],
         name = json['name'],
         category = json['category'],
         description = json['description'],
@@ -27,7 +27,7 @@ class Item{
 
   Map<String, dynamic> toJson() =>
       {
-        'imageUrl': imageUrl,
+        'image_url': image_url,
         'name': name,
         'category': category,
         'description': description,

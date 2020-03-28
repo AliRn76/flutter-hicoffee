@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:marquee/marquee.dart';
 
 import 'package:hicoffee2/models/item_model.dart';
 
@@ -10,10 +13,13 @@ class ItemDetail extends StatefulWidget {
   @override
   _ItemDetailState createState() => _ItemDetailState();
 }
+
 class _ItemDetailState extends State<ItemDetail> {
+
+
   @override
   Widget build(BuildContext context) {
-    if (widget.item.description == " "){
+    if (widget.item.description == " ") {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: Directionality(
@@ -25,16 +31,49 @@ class _ItemDetailState extends State<ItemDetail> {
                 textDirection: TextDirection.rtl,
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  child: Text(
-                    // Item Name
-                    widget.item.name,
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: "BNazanin",
-                      fontWeight: FontWeight.w600,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.edit),
+                        onPressed: () {
+                          print("clicked on edit");
+                        },
+                        color: Colors.grey[600],
+                        iconSize: 23.0,
+                      ),
+                      Flexible(
+                        child: Container(
+                          height: 25.0,
+                          child: Marquee(
+                            text: widget.item.name,
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontFamily: "BNazanin",
+                              fontWeight: FontWeight.w600,
+                            ),
+                            scrollAxis: Axis.horizontal,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            blankSpace: MediaQuery.of(context).size.width-150,
+                            velocity: 100.0,
+                            pauseAfterRound: Duration(seconds: 6),
+                            startPadding: 10.0,
+                            accelerationDuration: Duration(seconds: 1),
+                            accelerationCurve: Curves.linear,
+                            decelerationDuration: Duration(milliseconds: 500),
+                            decelerationCurve: Curves.easeOut,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(FontAwesomeIcons.trash),
+                        onPressed: () {
+                          print("clicked on edit");
+                        },
+                        color: Colors.redAccent[400],
+                        iconSize: 21.0,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -70,7 +109,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 ),
               ),
               Container(
-              margin: EdgeInsets.only(top: 10.0),
+                margin: EdgeInsets.only(top: 10.0),
                 decoration: BoxDecoration(
                   color: Colors.pink[100],
                   borderRadius: BorderRadius.circular(20.0),
@@ -104,25 +143,72 @@ class _ItemDetailState extends State<ItemDetail> {
           ),
         ),
       );
-    }else{
+    } else {
       return Column(
         children: <Widget>[
           Directionality(
             textDirection: TextDirection.rtl,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              child: Text(
-                // Item Name
-                widget.item.name,
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: "BNazanin",
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.edit),
+                    onPressed: () {
+                      print("clicked on edit");
+                    },
+                    color: Colors.grey[600],
+                    iconSize: 23.0,
+                  ),
+                  Flexible(
+                    child: Container(
+                      height: 25.0,
+                      child: Marquee(
+                        text: widget.item.name,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontFamily: "BNazanin",
+                          fontWeight: FontWeight.w600,
+                        ),
+                        scrollAxis: Axis.horizontal,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        blankSpace: MediaQuery.of(context).size.width-150,
+                        velocity: 100.0,
+                        pauseAfterRound: Duration(seconds: 6),
+                        startPadding: 10.0,
+                        accelerationDuration: Duration(seconds: 1),
+                        accelerationCurve: Curves.linear,
+                        decelerationDuration: Duration(milliseconds: 500),
+                        decelerationCurve: Curves.easeOut,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(FontAwesomeIcons.trash),
+                    onPressed: () {
+                      print("clicked on edit");
+                    },
+                    color: Colors.redAccent[400],
+                    iconSize: 21.0,
+                  ),
+                ],
               ),
             ),
+//            child: Container(
+//              width: MediaQuery.of(context).size.width,
+//              child: Text(
+//                // Item Name
+//                widget.item.name,
+//                maxLines: 1,
+//                textAlign: TextAlign.center,
+//                style: TextStyle(
+//                  fontSize: 25.0,
+//                  fontFamily: "BNazanin",
+//                  fontWeight: FontWeight.w600,
+//                ),
+//              ),
+//            ),
           ),
           SizedBox(height: 20.0),
           Row(
@@ -197,7 +283,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 Container(
                   margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
 //                  height: 100.0,
-                  width: MediaQuery.of(context).size.width-20,
+                  width: MediaQuery.of(context).size.width - 20,
                   decoration: BoxDecoration(
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(20.0),
@@ -217,8 +303,5 @@ class _ItemDetailState extends State<ItemDetail> {
         ],
       );
     }
-
   }
 }
-
-

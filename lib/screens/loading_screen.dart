@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hicoffee2/sqlite/CreateDatabase.dart';
 
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 
@@ -31,8 +32,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
       // Set Default Image & Description For Item
       for(int i=0 ; i<items.length ; i++){
-        if(items[i].imageUrl == null){
-          items[i].imageUrl = "assets/images/photo_2020-03-22_18-17-08.jpg";
+        if(items[i].image_url == null){
+          print(items[i].image_url);
+          items[i].image_url = "/$i image.jpg";
         }
         if(items[i].description == null){
           items[i].description = " ";
@@ -54,9 +56,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-
+    createDatabase();
     takeItems();
-
   }
 
 

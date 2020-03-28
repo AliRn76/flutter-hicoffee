@@ -22,6 +22,156 @@ class _ItemScreenState extends State<ItemScreen> {
 
   int _currentValue = 1;
 
+  _sellButton(int number){
+    // Age Az Oon jens Mojood Nabood
+    if(number == 0 || number == null){
+      return Positioned(
+        left: 50.0,
+        top: 15.0,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
+          child: RaisedButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              side: BorderSide(color: Colors.black87),
+            ),
+            color: Colors.greenAccent[400],
+            onPressed: (){
+              print("Nothing Will Happen");
+            },
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 5.0),
+              child: Text(
+                "فروخته شد",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "BNazanin",
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }else{
+      // Age Az Oon Jens Dashtan
+      return Positioned(
+        left: 50.0,
+        top: 15.0,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
+          child: RaisedButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              side: BorderSide(color: Colors.black87),
+            ),
+            color: Colors.greenAccent[400],
+            onPressed: (){
+              print("$_currentValue Forokhte shod");
+            },
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 5.0),
+              child: Text(
+                "فروخته شد",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "BNazanin",
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  _buildNumberScroller(int number){
+    if (number == 0 || number == null){
+      return Positioned(
+        right: 70.0,
+        top: 10.0,
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.0),
+              border: Border.all(color: Colors.black26, width: 1.0, ),
+          ),
+          child: Center(
+            child: Text(
+              "0",
+              style: TextStyle(
+                fontSize: 23.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+    }else if (number == 1){
+      return Positioned(
+        right: 70.0,
+        top: 10.0,
+        child: Container(
+          height: 50.0,
+          width: 50.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            border: Border.all(color: Colors.black26, width: 1.0, ),
+          ),
+          child: Center(
+            child: Text(
+              "1",
+              style: TextStyle(
+                fontSize: 23.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      );
+    }else{
+      return Positioned(
+        right: 20.0,
+        top: 10.0,
+        child: Container(
+          height: 50,
+          child: NumberPicker.horizontal(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  border: Border.all(color: Colors.black26, width: 1.0, )
+              ),
+              initialValue: _currentValue,
+              minValue: 1,
+              maxValue: number,
+              onChanged: (newValue) =>
+                  setState(() => _currentValue = newValue)
+          ),
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +194,7 @@ class _ItemScreenState extends State<ItemScreen> {
                   ],
                 ),
                 child: Hero(
-                  tag: widget.item.imageUrl,
+                  tag: widget.item.image_url,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30.0),
@@ -52,7 +202,7 @@ class _ItemScreenState extends State<ItemScreen> {
                     ),
                     child: Image(
 //                    image: AssetImage(widget.item.imageUrl),
-                      image: NetworkImage("http://al1.best:89${widget.item.imageUrl}"),
+                      image: NetworkImage("http://al1.best:89${widget.item.image_url}"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -137,16 +287,6 @@ class _ItemScreenState extends State<ItemScreen> {
                   ),
                 ),
               ),
-              Positioned(
-                left: 10.0,
-                bottom: 10.0,
-                child: IconButton(
-                  icon: Icon(FontAwesomeIcons.edit),
-                  onPressed: (){print("clicked on edit");},
-                  color: Colors.lightBlue[100],
-                  iconSize: 23.0,
-                ),
-              ),
             ],
           ),
           SizedBox(height: 20.0),
@@ -164,61 +304,8 @@ class _ItemScreenState extends State<ItemScreen> {
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                       ),
                     ),
-                    Positioned(
-                      left: 50.0,
-                      top: 15.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
-                        ),
-                        child: RaisedButton(
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          elevation: 5.0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              side: BorderSide(color: Colors.black87),
-                          ),
-                          color: Colors.greenAccent[400],
-                          onPressed: (){
-                            print("$_currentValue Forokhte shod");
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 5.0),
-                            child: Text(
-                              "فروخته شد",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: "BNazanin",
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 20.0,
-                      top: 10.0,
-                      child: Container(
-                        height: 50,
-                        child: NumberPicker.horizontal(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30.0),
-                            border: Border.all(color: Colors.black26, width: 1.0, )
-                          ),
-                            initialValue: _currentValue,
-                            minValue: 1,
-                            maxValue: 100,
-                            onChanged: (newValue) =>
-                                setState(() => _currentValue = newValue)
-                        ),
-                      ),
-                    ),
+                    _sellButton(widget.item.number),
+                    _buildNumberScroller(widget.item.number),
                   ],
                 ),
               ],
@@ -232,4 +319,4 @@ class _ItemScreenState extends State<ItemScreen> {
 
 
 //TODO: beshe edit kard
-//TODO:
+//TODO: beshe delete kard

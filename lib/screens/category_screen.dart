@@ -283,12 +283,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(15.0, 27.0, 15.0, 0.0),
                   child: Hero(
-                    tag: item.imageUrl,
+                    tag: item.image_url,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(25.0),
                       child: Image(
 //                      image: AssetImage("${item.imageUrl}"),
-                        image: NetworkImage("http://al1.best:89${item.imageUrl}"),
+                        image: NetworkImage("http://al1.best:89${item.image_url}"),
                         height: 86.0,
                         width: 110.0,
                         fit: BoxFit.cover,
@@ -306,4 +306,3 @@ class _CategoryScreenState extends State<CategoryScreen> {
 }
 
 
-//TODO: beshe item add kard

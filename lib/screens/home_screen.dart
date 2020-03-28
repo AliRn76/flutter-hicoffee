@@ -16,7 +16,9 @@ class HomeScreen extends StatefulWidget {
 
   final List<Item> getItems ;
 
-  HomeScreen({this.getItems});
+  HomeScreen({
+    this.getItems,
+  });
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -164,12 +166,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 left: 10.0,
                                 bottom: 110,
                                 child: Hero(
-                                  tag: item.imageUrl,
+                                  tag: item.image_url,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),
                                     child: Image(
 //                                    image: AssetImage(item.imageUrl),
-                                      image: NetworkImage("http://al1.best:89${item.imageUrl}"),
+                                      image: NetworkImage("http://al1.best:89${item.image_url}"),
                                       fit: BoxFit.cover,
                                       height: 150.0,
                                       width: 150.0,
