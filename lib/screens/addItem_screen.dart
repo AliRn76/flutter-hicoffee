@@ -1,17 +1,19 @@
 import 'dart:ui';
-
-import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+
+import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hicoffee2/models/item_model.dart';
 import 'package:hicoffee2/screens/home_screen.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
 
+import 'package:hicoffee2/sqlite/database_helper.dart';
 
 
 class AddItemScreen extends StatefulWidget {
@@ -27,121 +29,264 @@ class _AddItemScreenState extends State<AddItemScreen> {
   TextEditingController description = TextEditingController();
   String category;
   int number = 1;
+  bool condition = false;
 
 
   void _postAddItem()async{
-    try{
-      // Post Request
-      Map myBody = {
-        "name": nameController.text,
-        "category": category,
-        "number": number,
-        "price": int.parse(priceController.text),
-        "description": description.text,
-        "image_url": "default.jpg",
-      };
-      String jsonBody = jsonEncode(myBody);
 
-      Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
+    print("text: ${nameController.text}");
+    print("price: ${priceController.text}");
+    bool checkName = await DatabaseHelper().checkItemName(nameController.text); // False mean you can use that username
 
-      Response response = await post("http://al1.best:89/api/add-item/", body: jsonBody, headers: reqHeader);
-
-      // Show Response Message
-      showDialog(
-          context: context,
-          builder: (context) {
-            return BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  side: BorderSide(color: Colors.black87),
-                ),
-                title: Center(
-                  child: Text(
-                    'ثبت شد',
-                    style: TextStyle(
-                      fontFamily: "BNazanin",
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.greenAccent[700],
+    if(nameController.text == ' ' || nameController.text == null || priceController.text == ' '|| priceController.text == null || checkName){
+      if(checkName){
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(milliseconds: 700), () {
+                Navigator.of(context).pop(true);
+              });
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Text(
+                      '.نام محصول تکراری است',
+                      style: TextStyle(
+                        fontFamily: "BNazanin",
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent[700],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          }
-      );
-      // Collect Data Again
-      Future.delayed(Duration(milliseconds: 700), () {
-        Navigator.of(context, rootNavigator: true).pop();
-        takeItems();
-      });
-    }
-    on Exception catch (exception){
-      print(exception);
-      showDialog(
-          context: context,
-          builder: (context) {
-            Future.delayed(Duration(milliseconds: 700), () {
-              Navigator.of(context).pop(true);
-            });
-            return BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  side: BorderSide(color: Colors.black87),
-                ),
-                title: Center(
-                  child: Text(
-                    'خطا',
-                    style: TextStyle(
-                      fontFamily: "BNazanin",
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.redAccent[700],
+              );
+            }
+        );
+      }else if (nameController.text == ' ' || nameController.text == null ){
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(milliseconds: 700), () {
+                Navigator.of(context).pop(true);
+              });
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Text(
+                      '.نام محصول را پر کنید',
+                      style: TextStyle(
+                        fontFamily: "BNazanin",
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent[700],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          }
-      );
+              );
+            }
+        );
+      }else{
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(milliseconds: 700), () {
+                Navigator.of(context).pop(true);
+              });
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Text(
+                      '.قیمت را پر کنید',
+                      style: TextStyle(
+                        fontFamily: "BNazanin",
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent[700],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+        );
+      }
+    }else {
+      Navigator.of(context).pop(true);
+      try{
+        // Post Request
+        Map<String, dynamic> myBody = {
+          "name": nameController.text,
+          "category": category,
+          "number": number,
+          "price": int.parse(priceController.text),
+          "description": description.text,
+          "image_url": "default.jpg",
+        };
+        String jsonBody = jsonEncode(myBody);
+
+        Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
+
+        Response response = await post("http://al1.best:89/api/add-item/", body: jsonBody, headers: reqHeader);
+
+        // Show Response Message
+        if(response.statusCode == 200){
+          condition = true;
+          showDialog(
+              context: context,
+              builder: (context) {
+                return BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      side: BorderSide(color: Colors.black87),
+                    ),
+                    title: Center(
+                      child: Text(
+                        'ثبت شد',
+                        style: TextStyle(
+                          fontFamily: "BNazanin",
+                          fontSize: 23.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.greenAccent[700],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+          );
+        }else{
+          showDialog(
+              context: context,
+              builder: (context) {
+                Future.delayed(Duration(milliseconds: 700), () {
+                  Navigator.of(context).pop(true);
+                });
+                return BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      side: BorderSide(color: Colors.black87),
+                    ),
+                    title: Center(
+                      child: Text(
+                        '${response.statusCode} خطا ',
+                        style: TextStyle(
+                          fontFamily: "BNazanin",
+                          fontSize: 23.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.redAccent[700],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+          );
+        }
+        // Collect Data Again
+        Future.delayed(Duration(milliseconds: 700), () {
+//          Navigator.of(context, rootNavigator: true).pop();
+          takeItems(myBody);
+        });
+      }
+      on Exception catch (exception){
+        print(exception);
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(milliseconds: 700), () {
+                Navigator.of(context).pop(true);
+              });
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Text(
+                      'خطا',
+                      style: TextStyle(
+                        fontFamily: "BNazanin",
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent[700],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+        );
+      }
     }
   }
 
 
-  void takeItems()async{
-    try{
-      Response response = await get("http://al1.best:89/api/show-all-items/");
-      List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
-
-      // Serialize data
-      List<Item> items = data.map((m) => Item.fromJson(m)).toList();
-
-      // Set Default Image & Description For Item
-      for(int i=0 ; i<items.length ; i++){
-        if(items[i].image_url == null){
-          print(items[i].image_url);
-          items[i].image_url = "/$i image.jpg";
-        }
-        if(items[i].description == null){
-          items[i].description = " ";
-        }
-      }
-
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen(getItems: items)),
-      );
-//      Navigator.of(context).pop();
+  void takeItems(Map<String, dynamic> myBody)async{
+    //‌ If HTTP Header Was 'OK' Insert item it on local database
+    if(condition){
+          Item item = Item.fromJson(myBody);
+          var result = await DatabaseHelper().insertItem(item);
+          print("Insert Result: $result");
+          Navigator.of(context).pop();
+//          await Navigator.pushReplacement(
+//            context,
+//            MaterialPageRoute(builder: (context) => HomeScreen(all_items: items)),
+////        MaterialPageRoute(builder: (context) => HomeScreen()),
+//          );
     }
-    on Exception{
-      // Try Every 1 Sec, For Connecting To Server
-      Future.delayed(Duration(seconds: 1));
-      takeItems();
-    }
+//    try{
+//      Response response = await get("http://al1.best:89/api/show-all-items/");
+//      List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+//
+//      // Serialize data
+//      List<Item> items = data.map((m) => Item.fromJson(m)).toList();
+//
+//      // Set Default Image & Description For Item
+//      for(int i=0 ; i<items.length ; i++){
+//        if(items[i].image_url == null){
+//          print(items[i].image_url);
+//          items[i].image_url = "/$i image.jpg";
+//        }
+//        if(items[i].description == null){
+//          items[i].description = " ";
+//        }
+//      }
+//
+//      await Navigator.pushReplacement(
+//        context,
+//        MaterialPageRoute(builder: (context) => HomeScreen(all_items: items)),
+////        MaterialPageRoute(builder: (context) => HomeScreen()),
+//      );
+////      Navigator.of(context).pop();
+//    }
+//    on Exception{
+//      // Try Every 1 Sec, For Connecting To Server
+//      Future.delayed(Duration(seconds: 1));
+//      takeItems();
+//    }
   }
 
   @override
@@ -345,7 +490,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
                                         _formKey.currentState.save();
-                                        Navigator.of(context).pop(true);
+//                                        Navigator.of(context).pop(true);
                                         _postAddItem();
 //                                    PostItem(
 //                                      name: nameController.text,

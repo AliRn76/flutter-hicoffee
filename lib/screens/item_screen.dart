@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:hicoffee2/models/item_model.dart';
 
@@ -200,11 +201,18 @@ class _ItemScreenState extends State<ItemScreen> {
                         bottomLeft: Radius.circular(30.0),
                         bottomRight: Radius.circular(30.0)
                     ),
-                    child: Image(
-//                    image: AssetImage(widget.item.imageUrl),
-                      image: NetworkImage("http://al1.best:89${widget.item.image_url}"),
+                    child: CachedNetworkImage(
+                      imageUrl: "http://al1.best:89${widget.item.image_url}",
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                       fit: BoxFit.cover,
+//                      fadeInCurve: Curves.easeIn,
                     ),
+//                    child: Image(
+////                    image: AssetImage(widget.item.imageUrl),
+//                      image: NetworkImage("http://al1.best:89${widget.item.image_url}"),
+//                      fit: BoxFit.cover,
+//                    ),
                   ),
                 ),
               ),

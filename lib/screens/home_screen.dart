@@ -3,21 +3,23 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:hicoffee2/models/item_model.dart';
 import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/wigets/home_category.dart';
+import 'package:hicoffee2/sqlite/database_helper.dart';
 
 
 
 
 class HomeScreen extends StatefulWidget {
 
-  final List<Item> getItems ;
+  List<Item> all_items ;
 
   HomeScreen({
-    this.getItems,
+    this.all_items,
   });
 
   @override
@@ -26,13 +28,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  void updateAllList()async{
+   var result = await DatabaseHelper().selectItems();
+   widget.all_items.clear();
+   for(int i=0 ; i<result.length ; i++){
+     widget.all_items.add(Item.fromMap(result[i]));
+   }
+  }
+
   @override
   void initState() {
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    updateAllList();
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -46,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: <Widget>[
                       IconButton(
                         onPressed: (){
-                          print(widget.getItems[1].name);
+                          print(widget.all_items[1].name);
                         },
                         icon: Icon(FontAwesomeIcons.chartLine),
                         iconSize: 30.0,
@@ -76,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            HomeCategory(getItems: widget.getItems,),
+            HomeCategory(getItems: widget.all_items,),
             SizedBox(height: 40.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -98,10 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 textDirection: TextDirection.rtl,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.getItems.length,
+                  itemCount: widget.all_items.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index){
-                    Item item = widget.getItems[index];
+                    Item item = widget.all_items[index];
                     return GestureDetector(
 //                      onTap: () => Navigator.push(
 //                          context, SlideRightRoute(page: ItemScreen(item: item))
@@ -169,13 +180,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   tag: item.image_url,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),
-                                    child: Image(
-//                                    image: AssetImage(item.imageUrl),
-                                      image: NetworkImage("http://al1.best:89${item.image_url}"),
+                                    child: CachedNetworkImage(
+                                      imageUrl: "http://al1.best:89${item.image_url}",
+                                      placeholder: (context, url) => CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
                                       fit: BoxFit.cover,
+                                      fadeInCurve: Curves.easeIn,
                                       height: 150.0,
                                       width: 150.0,
                                     ),
+//                                    child: Image(
+//                                    image: NetworkImage("http://al1.best:89${item.image_url}"),
+//                                      fit: BoxFit.cover,
+//                                      height: 150.0,
+//                                      width: 150.0,
+//                                    ),
                                   ),
                                 ),
                               ),

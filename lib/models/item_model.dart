@@ -16,24 +16,37 @@ class Item{
     this.price,
   });
 
-  Item.fromJson(Map<String, dynamic> json)
-      : image_url = json['image_url'],
-        name = json['name'],
-        category = json['category'],
-        description = json['description'],
-        number = json['number'],
-        price = json['price'];
+  // fromMap()
+  Item.fromJson(Map<String, dynamic> json){
+    image_url = json['image_url'];
+    name = json['name'];
+    category = json['category'];
+    description = json['description'];
+    number = json['number'];
+    price = json['price'];
+  }
+
+  // toJson()
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['image_url'] = image_url;
+    map['name'] = name;
+    map['category'] = category;
+    map['description]'] = description;
+    map['number'] = number;
+    map['price'] = price;
+    return map;
+  }
 
 
-  Map<String, dynamic> toJson() =>
-      {
-        'image_url': image_url,
-        'name': name,
-        'category': category,
-        'description': description,
-        'number': number,
-        'price': price,
-      };
+  Item.fromMap(Map<String, dynamic> map){
+    image_url = map['Image_Url'];
+    name = map['Name'];
+    category = map['Category'];
+    description = map['Description'];
+    number = map['Number'];
+    price = map['Price'];
+  }
 
 }
 
