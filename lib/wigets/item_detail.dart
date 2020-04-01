@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 
+import 'package:hicoffee2/screens/editItem_screen.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
 
@@ -38,14 +39,7 @@ class _ItemDetailState extends State<ItemDetail> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      IconButton(
-                        icon: Icon(FontAwesomeIcons.edit),
-                        onPressed: () {
-                          print("clicked on edit");
-                        },
-                        color: Colors.grey[600],
-                        iconSize: 23.0,
-                      ),
+                      EditItemScreen(item: widget.item),
                       Flexible(
                         child: Container(
                           height: 25.0,
@@ -59,7 +53,6 @@ class _ItemDetailState extends State<ItemDetail> {
                             scrollAxis: Axis.horizontal,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             blankSpace: MediaQuery.of(context).size.width-150,
-//                            velocity: 100.0,
                             pauseAfterRound: Duration(seconds: 8),
                             startPadding: 10.0,
                             accelerationDuration: Duration(seconds: 1),
@@ -72,7 +65,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       IconButton(
                         icon: Icon(FontAwesomeIcons.trash),
                         onPressed: () {
-                          print("clicked on edit");
+                          print("clicked on delete");
                         },
                         color: Colors.redAccent[400],
                         iconSize: 21.0,
@@ -157,14 +150,7 @@ class _ItemDetailState extends State<ItemDetail> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    onPressed: () {
-                      print("clicked on edit");
-                    },
-                    color: Colors.grey[600],
-                    iconSize: 23.0,
-                  ),
+                  EditItemScreen(item: widget.item),
                   Flexible(
                     child: Container(
                       height: 25.0,

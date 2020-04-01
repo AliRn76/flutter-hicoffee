@@ -1,8 +1,6 @@
 
-import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -12,26 +10,49 @@ import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
 
+class EditItemScreen extends StatefulWidget {
+  final Item item;
 
-class AddItemScreen extends StatefulWidget {
+  EditItemScreen({this.item});
+
   @override
-  _AddItemScreenState createState() => _AddItemScreenState();
+  _EditItemScreenState createState() => _EditItemScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> {
+
+class _EditItemScreenState extends State<EditItemScreen> {
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController description = TextEditingController();
+  String image_url;
   String category;
+  int _currentValue;
   int number = 1;
   bool condition = false;
+  bool checkName;
 
 
-  void _postAddItem()async{
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.item.name);
+    priceController = TextEditingController(text: widget.item.price.toString());
+    description = TextEditingController(text: widget.item.description);
+    image_url = widget.item.image_url;
+    _currentValue = widget.item.number;
+  }
+
+
+  void _updateItem() async{
     print("text: ${nameController.text}");
     print("price: ${priceController.text}");
-    bool checkName = await DatabaseHelper().checkItemName(nameController.text); // False mean you can use that username
+    if (nameController.text == widget.item.name){
+      checkName = false;
+    }else{
+      checkName = await DatabaseHelper().checkItemName(nameController.text); // False mean you can use that username
+    }
 
     if(nameController.text == ' ' || nameController.text == null || priceController.text == ' '|| priceController.text == null || checkName){
       if(checkName){
@@ -127,18 +148,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
       try{
         // Post Request
         Map<String, dynamic> myBody = {
+          "last_name": widget.item.name,
           "name": nameController.text,
-          "category": category,
           "number": number,
           "price": int.parse(priceController.text),
           "description": description.text,
-          "image_url": "default.jpg",
+          "image_url": image_url,
         };
         String jsonBody = jsonEncode(myBody);
 
         Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
 
-        Response response = await post("http://al1.best:89/api/add-item/", body: jsonBody, headers: reqHeader);
+        Response response = await put("http://al1.best:89/api/edit-item/", body: jsonBody, headers: reqHeader);
 
         // Show Response Message
         if(response.statusCode == 200){
@@ -155,7 +176,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
                     title: Center(
                       child: Text(
-                        'ثبت شد',
+                        'ویرایش شد',
                         style: TextStyle(
                           fontFamily: "BNazanin",
                           fontSize: 23.0,
@@ -200,7 +221,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         }
         // Collect Data Again
         Future.delayed(Duration(milliseconds: 700), () {
-          takeItems(myBody);
+          Navigator.of(context).pop(true);
         });
       }
       on Exception catch (exception){
@@ -235,28 +256,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
         );
       }
     }
+
   }
 
 
-  void takeItems(Map<String, dynamic> myBody)async{
-    //‌ If HTTP Header Was 'OK' Insert item it on local database
-    if(condition){
-          Item item = Item.fromJson(myBody);
-          var result = await DatabaseHelper().insertItem(item);
-          print("Insert Result: $result");
-          Navigator.of(context).pop();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    int _currentValue = 1;
-
     return IconButton(
-      icon: Icon(Icons.library_add),
-      iconSize: 30.0,
-      color: Colors.green[400],
-      onPressed: (){
+      color: Colors.grey[600],
+      iconSize: 23.0,
+      icon: Icon(FontAwesomeIcons.edit),
+      onPressed: () {
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -317,40 +328,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: CustomRadioButton(
-                                horizontal: true,
-                                enableShape: true,
-                                elevation: 0.0,
-                                buttonColor: Theme.of(context).canvasColor,
-                                buttonLables: [
-                                  "ماگ",
-                                  "دونه قهوه",
-                                  "نوشیدنی",
-                                  "شکلات",
-                                  "وسایل",
-                                  "غیره",
-                                ],
-                                buttonValues: [
-                                  "ماگ",
-                                  "دونه قهوه",
-                                  "نوشیدنی",
-                                  "شکلات",
-                                  "وسایل",
-                                  "غیره",
-                                ],
-                                radioButtonValue: (value) => category = value,
-                                selectedColor: Colors.blue[300],
-                              ),
-                            ),
                             Row(
                               children: <Widget>[
                                 SizedBox(width: 10.0),
                                 Text(
                                   "تعداد: ",
                                   style: TextStyle(
-                                    color: Colors.black54
+                                      color: Colors.black54
                                   ),
                                 ),
                                 Container(
@@ -358,7 +342,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   child: NumberPicker.horizontal(
                                       initialValue: _currentValue,
                                       highlightSelectedValue: false,
-                                      minValue: 1,
+                                      minValue: 0,
                                       maxValue: 100,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(30.0),
@@ -452,7 +436,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
                                         _formKey.currentState.save();
-                                        _postAddItem();
+                                        _updateItem();
                                       }
                                     },
                                   ),
@@ -478,4 +462,3 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 }
-//TODO : دونه ها باید بشن دانه
