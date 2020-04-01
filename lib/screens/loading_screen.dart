@@ -35,9 +35,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
         if(items[i].image_url == null){
           items[i].image_url = "/$i image.jpg";
         }
-        if(items[i].description == null){
-          items[i].description = " ";
-        }
       }
 
       // Work with sqlite

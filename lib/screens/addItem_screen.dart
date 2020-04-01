@@ -9,8 +9,6 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:hicoffee2/sqlite/database_helper.dart';
-import 'package:hicoffee2/models/item_model.dart';
-
 
 
 class AddItemScreen extends StatefulWidget {
@@ -241,10 +239,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
   void takeItems(Map<String, dynamic> myBody)async{
     //‌ If HTTP Header Was 'OK' Insert item it on local database
     if(condition){
-          Item item = Item.fromJson(myBody);
-          var result = await DatabaseHelper().insertItem(item);
-          print("Insert Result: $result");
-          Navigator.of(context).pop();
+//          Item item = Item.fromJson(myBody);
+//          var result = await DatabaseHelper().insertItem(item);
+//          print("Insert Result: $result");
     }
   }
 

@@ -82,6 +82,15 @@ class DatabaseHelper{
     return result;
   }
 
+  // Delete One Item
+  Future<List<Map<String, dynamic>>> deleteItem(Item item) async{
+    Database db = await this.database;
+    var result = await db.rawQuery(
+        "Delete From $tbl_item Where $col_name == '${item.name}';"
+    );
+    return result;
+  }
+
   // Insert List Of Items
   Future<List<Map<String, dynamic>>> insertListItem(List<Item> items) async{
     Database db = await this.database;

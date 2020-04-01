@@ -2,6 +2,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hicoffee2/screens/home_screen.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/models/item_model.dart';
@@ -115,8 +118,39 @@ Item _otherItemBuilder(int index, List<Item> items){
 
 class _CategoryScreenState extends State<CategoryScreen> {
 
+  void updateAllList()async{
+    List<Item> items;
+    try{
+      Response response = await get("http://al1.best:89/api/show-all-items/");
+      List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      // Serialize data
+      items = data.map((m) => Item.fromJson(m)).toList();
+
+      // Set Default Image & Description For Item
+      for(int i=0 ; i<items.length ; i++){
+        if(items[i].image_url == null){
+          items[i].image_url = "/$i-image.jpg";
+        }
+      }
+    }
+    on Exception{
+      // Try Every 1 Sec, For Connecting To Server
+      Future.delayed(Duration(seconds: 1));
+      updateAllList();
+    }
+
+    setState(() {
+      widget.items.clear();
+      for(int i=0 ; i<items.length ; i++){
+        widget.items.add(items[i]);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateAllList();
     return Scaffold(
       appBar: AppBar(
         title: Row(

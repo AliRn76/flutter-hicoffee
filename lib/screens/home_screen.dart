@@ -3,14 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
-import 'package:hicoffee2/sqlite/database_helper.dart';
-import 'package:hicoffee2/wigets/home_category.dart';
+import 'package:hicoffee2/widgets/home_category.dart';
 import 'package:hicoffee2/models/item_model.dart';
-
 
 
 class HomeScreen extends StatefulWidget {
@@ -26,13 +26,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   void updateAllList()async{
-   var result = await DatabaseHelper().selectItems();
-   widget.all_items.clear();
-   for(int i=0 ; i<result.length ; i++){
-     widget.all_items.add(Item.fromMap(result[i]));
-   }
+    print("**************************TRYING OT UPDATE");
+    List<Item> items;
+    try{
+      Response response = await get("http://al1.best:89/api/show-all-items/");
+      List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      // Serialize data
+      items = data.map((m) => Item.fromJson(m)).toList();
+
+      // Set Default Image & Description For Item
+      for(int i=0 ; i<items.length ; i++){
+        if(items[i].image_url == null){
+          items[i].image_url = "/$i-image.jpg";
+        }
+      }
+    }
+    on Exception{
+      // Try Every 1 Sec, For Connecting To Server
+      Future.delayed(Duration(seconds: 1));
+      updateAllList();
+    }
+
+    setState(() {
+      widget.all_items.clear();
+      for(int i=0 ; i<items.length ; i++){
+        widget.all_items.add(items[i]);
+      }
+    });
   }
 
   @override
@@ -42,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context){
-    updateAllList();
+    print("I AM IN HOME SCREEN");
+//    updateAllList();
     return Scaffold(
       body: SafeArea(
         child: ListView(

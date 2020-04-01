@@ -1,15 +1,18 @@
 
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:numberpicker/numberpicker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
+import 'package:hicoffee2/widgets/item_detail.dart';
 import 'package:hicoffee2/models/item_model.dart';
-import 'package:hicoffee2/wigets/item_detail.dart';
+
 
 class ItemScreen extends StatefulWidget {
-  final Item item;
+  Item item;
 
   ItemScreen({this.item});
 
@@ -22,6 +25,35 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
 
   int _currentValue = 1;
+
+  void updateAllList() async {
+    print("************Item Screen");
+    Item temp_item;
+
+    try {
+      Response response = await get(
+        "http://al1.best:89/api/show-item/${widget.item.name}",);
+      Map data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      // Serialize data
+      temp_item = Item.fromJson(data);
+
+      // Set Default Image & Description For Item
+      if (temp_item.image_url == null) {
+        temp_item.image_url = "/image.jpg";
+      }
+    }
+
+    on Exception {
+      // Try Every 1 Sec, For Connecting To Server
+      Future.delayed(Duration(seconds: 1));
+      updateAllList();
+    }
+
+    setState(() {
+      widget.item = temp_item;
+    });
+  }
 
   _sellButton(int number){
     // Age Az Oon jens Mojood Nabood
@@ -114,8 +146,8 @@ class _ItemScreenState extends State<ItemScreen> {
           height: 50.0,
           width: 50.0,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              border: Border.all(color: Colors.black26, width: 1.0, ),
+            borderRadius: BorderRadius.circular(30.0),
+            border: Border.all(color: Colors.black26, width: 1.0, ),
           ),
           child: Center(
             child: Text(
@@ -328,3 +360,5 @@ class _ItemScreenState extends State<ItemScreen> {
 
 //TODO: beshe edit kard
 //TODO: beshe delete kard
+
+

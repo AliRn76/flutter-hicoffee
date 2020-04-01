@@ -1,11 +1,11 @@
 
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 
 import 'package:hicoffee2/screens/editItem_screen.dart';
+import 'package:hicoffee2/screens/deleteItem.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
 
@@ -24,7 +24,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.item.description == " ") {
+    if (widget.item.description == "" || widget.item.description == null) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: Directionality(
@@ -62,14 +62,7 @@ class _ItemDetailState extends State<ItemDetail> {
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: Icon(FontAwesomeIcons.trash),
-                        onPressed: () {
-                          print("clicked on delete");
-                        },
-                        color: Colors.redAccent[400],
-                        iconSize: 21.0,
-                      ),
+                      DeleteItemScreen(item: widget.item),
                     ],
                   ),
                 ),
@@ -164,8 +157,7 @@ class _ItemDetailState extends State<ItemDetail> {
                         scrollAxis: Axis.horizontal,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         blankSpace: MediaQuery.of(context).size.width-150,
-                        velocity: 100.0,
-                        pauseAfterRound: Duration(seconds: 6),
+                        pauseAfterRound: Duration(seconds: 8),
                         startPadding: 10.0,
                         accelerationDuration: Duration(seconds: 1),
                         accelerationCurve: Curves.linear,

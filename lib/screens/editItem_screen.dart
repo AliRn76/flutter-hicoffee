@@ -9,7 +9,6 @@ import 'dart:ui';
 import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
-
 class EditItemScreen extends StatefulWidget {
   final Item item;
 
@@ -46,8 +45,11 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
 
   void _updateItem() async{
-    print("text: ${nameController.text}");
-    print("price: ${priceController.text}");
+//    widget.item.name = nameController.text;
+//    widget.item.price =  int.parse(priceController.text);
+//    number = number;
+//    widget.item.description =  description.text;
+//    widget.item.image_url =  image_url;
     if (nameController.text == widget.item.name){
       checkName = false;
     }else{
@@ -84,7 +86,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
               );
             }
         );
-      }else if (nameController.text == ' ' || nameController.text == null ){
+      }else if (nameController.text == " " || nameController.text == null ){
         showDialog(
             context: context,
             builder: (context) {
@@ -147,6 +149,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
       Navigator.of(context).pop(true);
       try{
         // Post Request
+        print(description.text);
         Map<String, dynamic> myBody = {
           "last_name": widget.item.name,
           "name": nameController.text,
