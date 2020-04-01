@@ -1,16 +1,15 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'dart:ui';
 
-import 'package:hicoffee2/models/item_model.dart';
 import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
-import 'package:hicoffee2/wigets/home_category.dart';
 import 'package:hicoffee2/sqlite/database_helper.dart';
-
+import 'package:hicoffee2/wigets/home_category.dart';
+import 'package:hicoffee2/models/item_model.dart';
 
 
 
@@ -114,9 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (BuildContext context, int index){
                     Item item = widget.all_items[index];
                     return GestureDetector(
-//                      onTap: () => Navigator.push(
-//                          context, SlideRightRoute(page: ItemScreen(item: item))
-//                      ),
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => ItemScreen(item: item)),
@@ -189,12 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 150.0,
                                       width: 150.0,
                                     ),
-//                                    child: Image(
-//                                    image: NetworkImage("http://al1.best:89${item.image_url}"),
-//                                      fit: BoxFit.cover,
-//                                      height: 150.0,
-//                                      width: 150.0,
-//                                    ),
                                   ),
                                 ),
                               ),

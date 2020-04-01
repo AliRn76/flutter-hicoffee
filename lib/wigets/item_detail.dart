@@ -1,9 +1,13 @@
+
+
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:marquee/marquee.dart';
 
 import 'package:hicoffee2/models/item_model.dart';
+
+
 
 class ItemDetail extends StatefulWidget {
   final Item item;
@@ -195,20 +199,6 @@ class _ItemDetailState extends State<ItemDetail> {
                 ],
               ),
             ),
-//            child: Container(
-//              width: MediaQuery.of(context).size.width,
-//              child: Text(
-//                // Item Name
-//                widget.item.name,
-//                maxLines: 1,
-//                textAlign: TextAlign.center,
-//                style: TextStyle(
-//                  fontSize: 25.0,
-//                  fontFamily: "BNazanin",
-//                  fontWeight: FontWeight.w600,
-//                ),
-//              ),
-//            ),
           ),
           SizedBox(height: 20.0),
           Row(

@@ -1,9 +1,12 @@
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
+import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/models/item_model.dart';
-import 'item_screen.dart';
+
+
 
 class CategoryScreen extends StatefulWidget {
   // Catch Category
@@ -292,17 +295,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         placeholder: (context, url) => CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
                         fit: BoxFit.cover,
-//                        fadeInCurve: Curves.easeIn,
                         height: 86.0,
                         width: 110.0,
                       ),
-//                      child: Image(
-////                      image: AssetImage("${item.imageUrl}"),
-//                        image: NetworkImage("http://al1.best:89${item.image_url}"),
-//                        height: 86.0,
-//                        width: 110.0,
-//                        fit: BoxFit.cover,
-//                      ),
                     ),
                   ),
                 ),
