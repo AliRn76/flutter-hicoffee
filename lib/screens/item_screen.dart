@@ -4,8 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
+
 
 import 'package:hicoffee2/widgets/item_detail.dart';
 import 'package:hicoffee2/models/item_model.dart';
@@ -25,35 +24,6 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
 
   int _currentValue = 1;
-
-  void updateAllList() async {
-    print("************Item Screen");
-    Item temp_item;
-
-    try {
-      Response response = await get(
-        "http://al1.best:89/api/show-item/${widget.item.name}",);
-      Map data = jsonDecode(utf8.decode(response.bodyBytes));
-
-      // Serialize data
-      temp_item = Item.fromJson(data);
-
-      // Set Default Image & Description For Item
-      if (temp_item.image_url == null) {
-        temp_item.image_url = "/image.jpg";
-      }
-    }
-
-    on Exception {
-      // Try Every 1 Sec, For Connecting To Server
-      Future.delayed(Duration(seconds: 1));
-      updateAllList();
-    }
-
-    setState(() {
-      widget.item = temp_item;
-    });
-  }
 
   _sellButton(int number){
     // Age Az Oon jens Mojood Nabood

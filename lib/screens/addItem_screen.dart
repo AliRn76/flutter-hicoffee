@@ -1,6 +1,7 @@
 
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hicoffee2/models/item_model.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +32,15 @@ class _AddItemScreenState extends State<AddItemScreen> {
     print("price: ${priceController.text}");
     bool checkName = await DatabaseHelper().checkItemName(nameController.text); // False mean you can use that username
 
-    if(nameController.text == ' ' || nameController.text == null || priceController.text == ' '|| priceController.text == null || checkName){
+    if(nameController.text == ' ' || nameController.text == '' || nameController.text == null || priceController.text == ' '|| priceController.text == '' || priceController.text == null || checkName){
       if(checkName){
         showDialog(
             context: context,
             builder: (context) {
               Future.delayed(Duration(milliseconds: 700), () {
+//                Navigator.pop(context, () {
+//                  setState(() {});
+//                });
                 Navigator.of(context).pop(true);
               });
               return BackdropFilter(
@@ -61,7 +65,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
               );
             }
         );
-      }else if (nameController.text == ' ' || nameController.text == null ){
+      }else if (nameController.text == ' ' || nameController.text == null || nameController.text == ''){
         showDialog(
             context: context,
             builder: (context) {
@@ -122,6 +126,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
       }
     }else {
       Navigator.of(context).pop(true);
+//      Navigator.pop(context, () {
+//                  setState(() {});
+//                });
       try{
         // Post Request
         Map<String, dynamic> myBody = {
@@ -199,6 +206,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
         // Collect Data Again
         Future.delayed(Duration(milliseconds: 700), () {
           takeItems(myBody);
+//          Navigator.of(context).pop(true);
+//          Navigator.pop(context, () {
+//            setState(() {});
+//          });
         });
       }
       on Exception catch (exception){
@@ -239,9 +250,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
   void takeItems(Map<String, dynamic> myBody)async{
     //‌ If HTTP Header Was 'OK' Insert item it on local database
     if(condition){
-//          Item item = Item.fromJson(myBody);
-//          var result = await DatabaseHelper().insertItem(item);
-//          print("Insert Result: $result");
+      Item item = Item.fromJson(myBody);
+      var result = await DatabaseHelper().insertItem(item);
+      print("Insert Result: $result");
+      Navigator.of(context).pop();
     }
   }
 

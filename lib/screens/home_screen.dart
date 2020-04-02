@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:ui';
 
+//import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/widgets/home_category.dart';
@@ -26,7 +27,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   void updateAllList()async{
+//    Future.delayed(Duration(seconds: 7), () {
+//
+//    });
     print("**************************TRYING OT UPDATE");
     List<Item> items;
     try{
@@ -38,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Set Default Image & Description For Item
       for(int i=0 ; i<items.length ; i++){
-        if(items[i].image_url == null){
+        if(items[i].image_url == "/media/default.jpg"){
           items[i].image_url = "/$i-image.jpg";
         }
       }
@@ -49,23 +54,25 @@ class _HomeScreenState extends State<HomeScreen> {
       updateAllList();
     }
 
-    setState(() {
+//    setState(() {
+//    var result = await DatabaseHelper().selectItems();
       widget.all_items.clear();
       for(int i=0 ; i<items.length ; i++){
         widget.all_items.add(items[i]);
       }
-    });
+//    });
   }
 
   @override
   void initState() {
     super.initState();
+    print("****************************INTI STATE");
   }
 
   @override
   Widget build(BuildContext context){
     print("I AM IN HOME SCREEN");
-//    updateAllList();
+    updateAllList();
     return Scaffold(
       body: SafeArea(
         child: ListView(

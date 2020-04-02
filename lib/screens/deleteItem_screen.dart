@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:ui';
 
+import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
 class DeleteItemScreen extends StatefulWidget {
@@ -121,8 +122,9 @@ class _DeleteItemScreenState extends State<DeleteItemScreen> {
       );
     }
 
-//    var result = await DatabaseHelper().deleteItem(widget.item);
-//    print(result);
+
+    var result = await DatabaseHelper().deleteItem(widget.item);
+    print(result);
   }
 
 

@@ -32,8 +32,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
       // Set Default Image & Description For Item
       for(int i=0 ; i<items.length ; i++){
-        if(items[i].image_url == null){
-          items[i].image_url = "/$i image.jpg";
+        print(items[i].image_url);
+        if(items[i].image_url == "/media/default.jpg"){
+          items[i].image_url = "/$i-image.jpg";
         }
       }
 

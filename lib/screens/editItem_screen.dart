@@ -263,6 +263,15 @@ class _EditItemScreenState extends State<EditItemScreen> {
   }
 
 
+//  void editItem(Map<String, dynamic> myBody)async{
+//    //‌ If HTTP Header Was 'OK' Update item it on local database
+//    if(condition){
+//      Item item = Item.fromJson(myBody);
+//      var result = await DatabaseHelper().insertItem(item);
+//      print("Insert Result: $result");
+//      Navigator.of(context).pop();
+//    }
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -439,7 +448,9 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
                                         _formKey.currentState.save();
-                                        _updateItem();
+                                        setState(() {
+                                          _updateItem();
+                                        });
                                       }
                                     },
                                   ),

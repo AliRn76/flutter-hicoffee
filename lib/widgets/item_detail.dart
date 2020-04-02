@@ -3,15 +3,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 import 'package:hicoffee2/screens/editItem_screen.dart';
-import 'package:hicoffee2/screens/deleteItem.dart';
+import 'package:hicoffee2/screens/deleteItem_screen.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
 
 
 class ItemDetail extends StatefulWidget {
-  final Item item;
+  Item item;
 
   ItemDetail({this.item});
 
@@ -22,8 +24,48 @@ class ItemDetail extends StatefulWidget {
 class _ItemDetailState extends State<ItemDetail> {
 
 
+  void updateAllList() async {
+    print("************Item Screen");
+    Item temp_item;
+
+    try {
+      print("NAEEMMMMMMMMEEE");
+      print(widget.item.name);
+      Response response = await get(
+        "http://al1.best:89/api/show-item/${widget.item.name}",);
+      if (response.statusCode != 404){
+        Map data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        print("dataaaaaaaaaaaaaaaaa");
+        print(data);
+        // Serialize data
+        temp_item = Item.fromJson(data);
+
+        // Set Default Image & Description For Item
+        if (temp_item.image_url == "/media/default.jpg") {
+          temp_item.image_url = widget.item.image_url;
+        }
+      }
+
+    }
+
+    on Exception catch (exception){
+      print(exception);
+      // Try Every 1 Sec, For Connecting To Server
+      Future.delayed(Duration(seconds: 1));
+      updateAllList();
+    }
+
+    print(temp_item.name);
+
+//    setState(() {
+      widget.item = temp_item;
+//    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateAllList();
     if (widget.item.description == "" || widget.item.description == null) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),

@@ -2,7 +2,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hicoffee2/screens/home_screen.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
@@ -129,7 +128,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
       // Set Default Image & Description For Item
       for(int i=0 ; i<items.length ; i++){
-        if(items[i].image_url == null){
+        if(items[i].image_url == "/media/default.jpg"){
           items[i].image_url = "/$i-image.jpg";
         }
       }
