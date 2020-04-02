@@ -114,11 +114,19 @@ class DatabaseHelper{
   }
 
   // Update One Item
-  Future<int> updateItem(Item item) async{
+  Future<List<Map<String, dynamic>>> updateItem(Item item, String last_name) async{
     Database db = await this.database;
-    var result =await db.update(tbl_item, item.toMap(), where: '$col_name = ?', whereArgs: [item.name]);
+    var result = await db.rawQuery(
+        "UPDATE $tbl_item "
+        "SET $col_name = '${item.name}', "
+            "$col_image_url = '${item.image_url}', "
+            "$col_description = '${item.description}', "
+            "$col_number = ${item.number}, "
+            "$col_price = ${item.price} "
+        "WHERE $col_name = '$last_name'; ");
     return result;
   }
+
 
   // Check For Item Name Is Valid Or Not (False mean You Can Use It)
   Future<bool> checkItemName(String name) async{

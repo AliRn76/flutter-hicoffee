@@ -25,8 +25,9 @@ class _ItemDetailState extends State<ItemDetail> {
 
 
   void updateAllList() async {
+
     print("************Item Screen");
-    Item temp_item;
+    Item temp_item = widget.item;
 
     try {
       print("NAEEMMMMMMMMEEE");
@@ -62,6 +63,8 @@ class _ItemDetailState extends State<ItemDetail> {
       widget.item = temp_item;
 //    });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +188,7 @@ class _ItemDetailState extends State<ItemDetail> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+
                   EditItemScreen(item: widget.item),
                   Flexible(
                     child: Container(
@@ -211,7 +215,7 @@ class _ItemDetailState extends State<ItemDetail> {
                   IconButton(
                     icon: Icon(FontAwesomeIcons.trash),
                     onPressed: () {
-                      print("clicked on edit");
+                      print("clicked on delete");
                     },
                     color: Colors.redAccent[400],
                     iconSize: 21.0,

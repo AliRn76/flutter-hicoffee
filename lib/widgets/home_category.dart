@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:hicoffee2/animations/slide_right_route.dart';
+import 'package:hicoffee2/animations/slide_left_route.dart';
 
 import 'package:hicoffee2/models/item_model.dart';
 import 'package:hicoffee2/screens/category_screen.dart';

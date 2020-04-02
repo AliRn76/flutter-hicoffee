@@ -224,7 +224,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
         }
         // Collect Data Again
         Future.delayed(Duration(milliseconds: 700), () {
-          Navigator.of(context).pop(true);
+          editItem(myBody);
         });
       }
       on Exception catch (exception){
@@ -263,15 +263,16 @@ class _EditItemScreenState extends State<EditItemScreen> {
   }
 
 
-//  void editItem(Map<String, dynamic> myBody)async{
-//    //‌ If HTTP Header Was 'OK' Update item it on local database
-//    if(condition){
-//      Item item = Item.fromJson(myBody);
-//      var result = await DatabaseHelper().insertItem(item);
-//      print("Insert Result: $result");
-//      Navigator.of(context).pop();
-//    }
-//  }
+  void editItem(Map<String, dynamic> myBody)async{
+    //‌ If HTTP Header Was 'OK' Update item it on local database
+    if(condition){
+      Item item = Item.fromJson(myBody);
+      var result = await DatabaseHelper().updateItem(item, widget.item.name);
+      print("****************Update Result: $result");
+    }
+    Navigator.pop(context, 'Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!');
+//    Navigator.of(context).pop(true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -355,7 +356,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                       initialValue: _currentValue,
                                       highlightSelectedValue: false,
                                       minValue: 0,
-                                      maxValue: 100,
+                                      maxValue: 200,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(30.0),
                                           border: Border.all(color: Colors.blue[400], width: 1.3, )
@@ -448,9 +449,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onPressed: () {
                                       if (_formKey.currentState.validate()) {
                                         _formKey.currentState.save();
-                                        setState(() {
-                                          _updateItem();
-                                        });
+                                        _updateItem();
                                       }
                                     },
                                   ),

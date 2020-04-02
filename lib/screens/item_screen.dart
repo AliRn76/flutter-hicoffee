@@ -4,8 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'dart:ui';
 
-
+import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/widgets/item_detail.dart';
 import 'package:hicoffee2/models/item_model.dart';
 
@@ -24,7 +27,128 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
 
   int _currentValue = 1;
+  bool condition = false;
 
+  void sellItem() async{
+    try{
+      Map<String, dynamic> myBody = {
+        "number": _currentValue,
+        "name": widget.item.name,
+      };
+
+      String jsonBody = jsonEncode(myBody);
+      Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
+      Response response = await post("http://al1.best:89/api/sell-item/", body: jsonBody, headers: reqHeader);
+
+      if(response.statusCode == 200){
+        condition = true;
+        showDialog(
+            context: context,
+            builder: (context) {
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(
+                        '$_currentValue عدد فروخته شد ',
+                        style: TextStyle(
+                          fontFamily: "BNazanin",
+                          fontSize: 23.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.greenAccent[700],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+        );
+      }else{
+        showDialog(
+            context: context,
+            builder: (context) {
+              Future.delayed(Duration(milliseconds: 700), () {
+                Navigator.of(context).pop(true);
+              });
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Text(
+                      '${response.statusCode} خطا ',
+                      style: TextStyle(
+                        fontFamily: "BNazanin",
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent[700],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+        );
+      }
+
+      Future.delayed(Duration(milliseconds: 700), () {
+        soldItem(myBody);
+      });
+
+    }
+    on Exception catch (exception){
+      print(exception);
+      showDialog(
+          context: context,
+          builder: (context) {
+            Future.delayed(Duration(milliseconds: 700), () {
+              Navigator.of(context).pop(true);
+            });
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  side: BorderSide(color: Colors.black87),
+                ),
+                title: Center(
+                  child: Text(
+                    'خطا',
+                    style: TextStyle(
+                      fontFamily: "BNazanin",
+                      fontSize: 23.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.redAccent[700],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+      );
+    }
+
+  }
+
+  void soldItem(Map<String, dynamic> myBody)async{
+    //‌ If HTTP Header Was 'OK' Update item it on local database
+    if(condition){
+      Item item = Item.fromJson(myBody);
+      var result = await DatabaseHelper().updateItem(item, widget.item.name);
+      print("****************Sold Result: $result");
+    }
+    Navigator.of(context).pop(true);
+  }
   _sellButton(int number){
     // Age Az Oon jens Mojood Nabood
     if(number == 0 || number == null){
@@ -87,7 +211,8 @@ class _ItemScreenState extends State<ItemScreen> {
             ),
             color: Colors.greenAccent[400],
             onPressed: (){
-              print("$_currentValue Forokhte shod");
+              sellItem();
+//              print("$_currentValue Forokhte shod");
             },
             child: Padding(
               padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 5.0),

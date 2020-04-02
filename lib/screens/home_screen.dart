@@ -7,8 +7,10 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:hicoffee2/animations/slide_top_route.dart';
 //import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/screens/addItem_screen.dart';
+import 'package:hicoffee2/screens/chart_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/widgets/home_category.dart';
 import 'package:hicoffee2/models/item_model.dart';
@@ -85,15 +87,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     children: <Widget>[
                       IconButton(
-                        onPressed: (){
-                          print(widget.all_items[1].name);
-                        },
+                        onPressed: () => Navigator.push(
+                          context,
+                          SlideTopRoute(page: ChartScreen()),
+                        ),
                         icon: Icon(FontAwesomeIcons.chartLine),
                         iconSize: 30.0,
                         color: Colors.indigo[300],
                       ),
                       SizedBox(width: 10.0),
                       AddItemScreen(),
+                      IconButton(
+                        onPressed: (){
+                          print("Search");
+                        },
+                        icon: Icon(FontAwesomeIcons.search),
+                        iconSize: 27.0,
+                        color: Colors.black54,
+                      ),
                     ],
                   ),
                   Container(
