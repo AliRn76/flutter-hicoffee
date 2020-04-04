@@ -8,9 +8,11 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:hicoffee2/animations/slide_top_route.dart';
+import 'package:hicoffee2/animations/slide_bottom_route.dart';
 import 'package:hicoffee2/widgets/triangle_painter.dart';
 //import 'package:hicoffee2/sqlite/database_helper.dart';
-import 'package:hicoffee2/screens/addItem_screen.dart';
+//import 'package:hicoffee2/screens/addItem_screen.dart';
+import 'package:hicoffee2/screens/add_item_screen.dart';
 import 'package:hicoffee2/screens/chart_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';
 import 'package:hicoffee2/widgets/home_category.dart';
@@ -32,9 +34,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   void updateAllList()async{
-//    Future.delayed(Duration(seconds: 7), () {
-//
-//    });
     print("**************************TRYING OT UPDATE");
     List<Item> items;
     try{
@@ -97,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.indigo[300],
                       ),
                       SizedBox(width: 10.0),
-                      AddItemScreen(),
+//                      AddItemScreen(),
                       IconButton(
                         onPressed: (){
                           print("Search");
@@ -242,47 +241,52 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment(0, 1.07),
-            child: CustomPaint(
-              painter: TrianglePainter(
-                strokeColor: Colors.grey,
-                strokeWidth: 10,
-                paintingStyle: PaintingStyle.fill,
-              ),
-              child: Container(
-                height: 60.0,
-                width: 95.0,
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment(0, 1.07),
-            child: CustomPaint(
-              painter: TrianglePainter(
-                strokeColor: Colors.black,
-                strokeWidth: 10,
-                paintingStyle: PaintingStyle.fill,
-              ),
-              child: Container(
-                height: 65.0,
-                width: 70.0,
+      floatingActionButton: GestureDetector(
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment(0, 1.07),
+              child: CustomPaint(
+                painter: TrianglePainter(
+                  strokeColor: Colors.grey,
+                  strokeWidth: 10,
+                  paintingStyle: PaintingStyle.fill,
+                ),
+                child: Container(
+                  height: 65.0,
+                  width: 100.0,
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment(0, 1.07),
-            child: FlatButton(
-              onPressed: (){},
-              child: Icon(
-                FontAwesomeIcons.plus,
-                color: Colors.greenAccent[400],
+            Align(
+              alignment: Alignment(0, 1.07),
+              child: FlatButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  SlideBottomRoute(page: AddItemScreen()),
+                ),
+                child: CustomPaint(
+                  painter: TrianglePainter(
+                    strokeColor: Colors.black,
+                    strokeWidth: 10,
+                    paintingStyle: PaintingStyle.fill,
+                  ),
+                  child: Container(
+                    height: 70.0,
+                    width: 80.0,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15.0),
+                        child: Icon(
+                          FontAwesomeIcons.plus,
+                          color: Colors.greenAccent[400],
+                        ),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
