@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:hicoffee2/animations/slide_top_route.dart';
+import 'package:hicoffee2/widgets/triangle_painter.dart';
 //import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/chart_screen.dart';
@@ -241,9 +242,54 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment(0, 1.07),
+            child: CustomPaint(
+              painter: TrianglePainter(
+                strokeColor: Colors.grey,
+                strokeWidth: 10,
+                paintingStyle: PaintingStyle.fill,
+              ),
+              child: Container(
+                height: 60.0,
+                width: 95.0,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment(0, 1.07),
+            child: CustomPaint(
+              painter: TrianglePainter(
+                strokeColor: Colors.black,
+                strokeWidth: 10,
+                paintingStyle: PaintingStyle.fill,
+              ),
+              child: Container(
+                height: 65.0,
+                width: 70.0,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment(0, 1.07),
+            child: FlatButton(
+              onPressed: (){},
+              child: Icon(
+                FontAwesomeIcons.plus,
+                color: Colors.greenAccent[400],
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+
+
 
 //TODO: Container haye category --> shadow behesh add beshe
 //TODO: font koodak, ezafe beshe
