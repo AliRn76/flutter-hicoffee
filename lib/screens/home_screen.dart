@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment(0, 1.07),
               child: CustomPaint(
                 painter: TrianglePainter(
-                  strokeColor: Colors.grey,
+                  strokeColor: Colors.green,
                   strokeWidth: 10,
                   paintingStyle: PaintingStyle.fill,
                 ),
@@ -278,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.only(top: 15.0),
                         child: Icon(
                           FontAwesomeIcons.plus,
-                          color: Colors.greenAccent[400],
+                          color: Colors.greenAccent[700],
                         ),
                     ),
                   ),

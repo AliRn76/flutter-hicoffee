@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
+import '/home/ali/Desktop/NumberPicker/lib/numberpicker.dart';
 
 
 class AddItemScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   String category;
   int number = 1;
   bool condition = false;
-  int _currentValue = 1;
+  int _currentValue = 2;
 
   String dropdownValue = "ماگ";
 
@@ -122,7 +123,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   ),
                                   child: DropdownButton<String>(
                                       value: dropdownValue,
-                                      icon: Icon(Icons.keyboard_arrow_down),
+                                      icon: Icon(
+                                        Icons.keyboard_arrow_down,
+                                        color: Colors.blue[300]
+                                      ),
                                       iconSize: 42,
                                       underline: SizedBox(),
                                       onChanged: (String newValue) {
@@ -166,11 +170,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   child: NumberPicker.horizontal(
                                       initialValue: _currentValue,
                                       minValue: 1,
-                                      maxValue: 100,
+                                      maxValue: 200,
+                                      selectedValueColor: Colors.blue[400],
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30.0),
-                                          border: Border.all(color: Colors.blue[400], width: 1.3, )
+//                                        color: Colors.pink[50],
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        border: Border.all(color: Colors.blue[100], width: 1.3 )
                                       ),
+                                      highlightSelectedValue: true,
                                       onChanged: (newValue) =>
                                           setState(() => _currentValue = newValue)
                                   ),
@@ -257,10 +264,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      if (_formKey.currentState.validate()) {
-                                        _formKey.currentState.save();
+                                      print("ok");
+//                                      if (_formKey.currentState.validate()) {
 //                                  _postAddItem();
-                                      }
+//                                      }
                                     },
                                   ),
                                   IconButton(

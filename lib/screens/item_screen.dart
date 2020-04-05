@@ -284,6 +284,7 @@ class _ItemScreenState extends State<ItemScreen> {
         child: Container(
           height: 50,
           child: NumberPicker.horizontal(
+              selectedValueColor: Colors.white,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
                   border: Border.all(color: Colors.black26, width: 1.0, )
