@@ -54,6 +54,7 @@ class _DeleteItemScreenState extends State<DeleteItemScreen> {
               );
             }
         );
+        DatabaseHelper().deleteItem(widget.item);
       }else{
         showDialog(
             context: context,
@@ -87,7 +88,7 @@ class _DeleteItemScreenState extends State<DeleteItemScreen> {
       // Collect Data Again
       Future.delayed(Duration(milliseconds: 700), () {
         Navigator.of(context).pop(true);
-        Navigator.of(context).pop(true);
+        Navigator.of(context).pop(["x", widget.item.name]);
       });
     }
     on Exception catch (exception){

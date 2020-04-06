@@ -145,8 +145,9 @@ class _ItemScreenState extends State<ItemScreen> {
     if(condition){
       Item item = Item.fromJson(myBody);
       var result = await DatabaseHelper().updateItem(item, widget.item.name);
-      print("****************Sold Result: $result");
+      print("Sold Result: $result");
     }
+//    Navigator.pop(context, item)
     Navigator.of(context).pop(true);
   }
   _sellButton(int number){

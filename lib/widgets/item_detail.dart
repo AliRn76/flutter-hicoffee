@@ -65,6 +65,18 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
 
+//  void goToEditItemScreen(Item item) async{
+//    var result = await Navigator.push(
+//      context,
+//      MaterialPageRoute(builder: (context) => EditItemScreen(item: widget.item)),
+//    );
+//    print(result);
+//    print(result.name);
+//    if(result != null){
+//      widget.item = result;
+//    }
+//  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +97,14 @@ class _ItemDetailState extends State<ItemDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       EditItemScreen(item: widget.item),
+//                      IconButton(
+//                        color: Colors.grey[600],
+//                        iconSize: 23.0,
+//                        icon: Icon(FontAwesomeIcons.edit),
+//                        onPressed: () {
+//                          goToEditItemScreen(widget.item);
+//                        },
+//                      ),
                       Flexible(
                         child: Container(
                           height: 25.0,
@@ -188,7 +208,14 @@ class _ItemDetailState extends State<ItemDetail> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-
+//                  IconButton(
+//                  color: Colors.grey[600],
+//                    iconSize: 23.0,
+//                    icon: Icon(FontAwesomeIcons.edit),
+//                    onPressed: () {
+//                      goToEditItemScreen(widget.item);
+//                    },
+//                  ),
                   EditItemScreen(item: widget.item),
                   Flexible(
                     child: Container(
@@ -212,14 +239,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(FontAwesomeIcons.trash),
-                    onPressed: () {
-                      print("clicked on delete");
-                    },
-                    color: Colors.redAccent[400],
-                    iconSize: 21.0,
-                  ),
+                  DeleteItemScreen(item: widget.item),
                 ],
               ),
             ),

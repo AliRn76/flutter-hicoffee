@@ -1,12 +1,16 @@
 
-import 'dart:ui';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hicoffee2/models/item_model.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:numberpicker/numberpicker.dart';
-import '/home/ali/Desktop/NumberPicker/lib/numberpicker.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'dart:ui';
+
+import 'package:hicoffee2/sqlite/database_helper.dart';
+
 
 
 class AddItemScreen extends StatefulWidget {
@@ -15,16 +19,277 @@ class AddItemScreen extends StatefulWidget {
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController description = TextEditingController();
-  String category;
-  int number = 1;
-  bool condition = false;
-  int _currentValue = 2;
-
   String dropdownValue = "ماگ";
+  List<Item> itemList = [];
+  Color responseColor;
+  String responseText;
+  String category = "ماگ";
+  bool sendCheck = true;
+  int number = 2;
+
+
+  bool itemNameController(String name){
+    // False mean you can use that name
+    if(name == ' ' || name == null || name == ''){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  bool itemPriceController(String price){
+    // False mean you can use that price
+    if(price == ' ' || price == null || price == ''){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  _showResponseDialog(String responseText, Color responseColor){
+    showDialog(
+        context: context,
+        builder: (context) {
+          Future.delayed(Duration(milliseconds: 700), () {
+            Navigator.of(context).pop(true);
+          });
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(color: Colors.black87),
+              ),
+              title: Center(
+                child: Text(
+                  responseText,
+                  style: TextStyle(
+                    fontFamily: "BNazanin",
+                    fontSize: 23.0,
+                    fontWeight: FontWeight.w600,
+                    color: responseColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  _commentButton(){
+    return IconButton(
+      icon: Icon(FontAwesomeIcons.commentDots),
+      iconSize: 26.0,
+      color: Colors.blueGrey[500],
+      splashColor: Colors.lightBlue[100],
+      onPressed: (){
+        showDialog(
+            context: context,
+            builder: (context) {
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Column(
+                    children: <Widget>[
+                      Center(
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: TextFormField(
+                            controller: description,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.newline,
+                            maxLines: 4,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontFamily: "BNazanin",
+                              fontWeight: FontWeight.w400,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "توضیحات",
+                              contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        child: Text(
+                          "ثبت",
+                          style: TextStyle(
+                            fontFamily: "BNazanin",
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.greenAccent[700],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        );
+      },
+    );
+  }
+
+  _categoryView(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            SizedBox(width: 10.0),
+            Text(
+              "دسته بندی: ",
+              style: TextStyle(
+                  color: Colors.black54
+              ),
+            ),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: DropdownButton<String>(
+              value: dropdownValue,
+              icon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.blue[300]
+              ),
+              iconSize: 42,
+              underline: SizedBox(),
+              onChanged: (String newValue) {
+                setState(() {
+                  dropdownValue = newValue;
+                });
+              },
+              items: <String>[
+                'ماگ',
+                'دونه قهوه',
+                'نوشیدنی',
+                'شکلات',
+                "وسایل",
+                "غیره",
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList()),
+        ),
+      ],
+    );
+  }
+
+  Future<Response> sendPostRequest() async{
+    try{
+      Map<String, dynamic> myBody = {
+        "name": nameController.text,
+        "category": category,
+        "number": number,
+        "price": int.parse(priceController.text),
+        "description": description.text,
+        "image_url": "default.jpg",
+      };
+      String jsonBody = jsonEncode(myBody);
+
+      Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
+
+      Response response = await post("http://al1.best:89/api/add-item/", body: jsonBody, headers: reqHeader);
+
+      print("statusCode: ${response.statusCode}");
+      // Insert it on local db
+      if (response.statusCode == 200){
+        insertItem(myBody);
+      }
+
+      return response;
+    }
+    on Exception catch (exception){
+      print("Exception: $exception");
+      responseText = 'خطا';
+      responseColor = Colors.redAccent[700];
+      _showResponseDialog(responseText, responseColor);
+      return null;
+    }
+  }
+
+  void insertItem(Map<String, dynamic> newItem)async{
+    //‌ If HTTP Header Was 'OK' Insert item it on local database
+    Item item;
+    item = Item.fromJson(newItem);
+    var result = await DatabaseHelper().insertItem(item);
+
+    // Add it on list for response back
+    itemList.add(item);
+    setState(() {
+      Navigator.maybePop(context, itemList);
+    });
+    print("Insert Result: $result");
+  }
+
+  void tryAddItem() async{
+    sendCheck = false;
+    bool checkName = await DatabaseHelper().checkItemName(nameController.text); // False mean you can use that username
+    print("checkName: $checkName");
+
+    if(itemNameController(nameController.text) || itemPriceController(priceController.text) || checkName){
+      if(checkName){
+        responseText = '.نام محصول تکراری است';
+        responseColor = Colors.redAccent[700];
+
+      }else if(itemNameController(nameController.text)){
+        responseText = '.نام محصول را پر کنید';
+        responseColor = Colors.redAccent[700];
+
+      }else{
+        responseText = '.قیمت را پر کنید';
+        responseColor = Colors.redAccent[700];
+      }
+      _showResponseDialog(responseText, responseColor);
+      sendCheck = true;
+
+    }else{
+      Response response = await sendPostRequest();
+
+      if(response != null){
+        if(response.statusCode == 200){
+          responseText = 'ثبت شد';
+          responseColor = Colors.greenAccent[700];
+          setState(() {
+            nameController = TextEditingController();
+            priceController = TextEditingController();
+            description = TextEditingController();
+          });
+
+        }else{
+          responseText = '${response.statusCode} خطا ';
+          responseColor = Colors.redAccent[700];
+        }
+        _showResponseDialog(responseText, responseColor);
+      }
+      sendCheck = true;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,57 +366,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 ),
                               ),
                             ),
+                            _categoryView(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    SizedBox(width: 10.0),
-                                    Text(
-                                      "دسته بندی: ",
-                                      style: TextStyle(
-                                          color: Colors.black54
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)
-                                  ),
-                                  child: DropdownButton<String>(
-                                      value: dropdownValue,
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.blue[300]
-                                      ),
-                                      iconSize: 42,
-                                      underline: SizedBox(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          dropdownValue = newValue;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'ماگ',
-                                        'دونه قهوه',
-                                        'نوشیدنی',
-                                        'شکلات',
-                                        "وسایل",
-                                        "غیره",
-                                      ].map<DropdownMenuItem<String>>((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList()),
-                                ),
-                              ],
-                            ),
-                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
@@ -168,18 +384,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 Container(
                                   height: 50,
                                   child: NumberPicker.horizontal(
-                                      initialValue: _currentValue,
+                                      initialValue: number,
                                       minValue: 1,
                                       maxValue: 200,
                                       selectedValueColor: Colors.blue[400],
                                       decoration: BoxDecoration(
-//                                        color: Colors.pink[50],
                                         borderRadius: BorderRadius.circular(15.0),
                                         border: Border.all(color: Colors.blue[100], width: 1.3 )
                                       ),
                                       highlightSelectedValue: true,
                                       onChanged: (newValue) =>
-                                          setState(() => _currentValue = newValue)
+                                          setState(() => number = newValue)
                                   ),
                                 ),
                               ],
@@ -189,70 +404,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(FontAwesomeIcons.commentDots),
-                                    iconSize: 26.0,
-                                    color: Colors.blueGrey[500],
-                                    splashColor: Colors.lightBlue[100],
-                                    onPressed: (){
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return BackdropFilter(
-                                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                              child: AlertDialog(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(30.0),
-                                                  side: BorderSide(color: Colors.black87),
-                                                ),
-                                                title: Column(
-                                                  children: <Widget>[
-                                                    Center(
-                                                      child: Directionality(
-                                                        textDirection: TextDirection.rtl,
-                                                        child: TextFormField(
-                                                          controller: description,
-                                                          keyboardType: TextInputType.text,
-                                                          textInputAction: TextInputAction.newline,
-                                                          maxLines: 4,
-                                                          style: TextStyle(
-                                                            fontSize: 18.0,
-                                                            fontFamily: "BNazanin",
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                          decoration: InputDecoration(
-                                                            hintText: "توضیحات",
-                                                            contentPadding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                                                            border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.circular(10),
-                                                            ),
-                                                          ),
-
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    FlatButton(
-                                                      child: Text(
-                                                        "ثبت",
-                                                        style: TextStyle(
-                                                          fontFamily: "BNazanin",
-                                                          fontSize: 20.0,
-                                                          fontWeight: FontWeight.w600,
-                                                          color: Colors.greenAccent[700],
-                                                        ),
-                                                      ),
-                                                      onPressed: () {
-                                                        Navigator.of(context).pop(true);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                      );
-                                    },
-                                  ),
+                                  _commentButton(),
                                   RaisedButton(
                                     color: Colors.greenAccent[200],
                                     child: Text(
@@ -264,14 +416,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      print("ok");
-//                                      if (_formKey.currentState.validate()) {
-//                                  _postAddItem();
-//                                      }
+                                      if(sendCheck){
+                                        tryAddItem();
+                                      }
                                     },
                                   ),
                                   IconButton(
-                                    icon: Icon(FontAwesomeIcons.image),
+                                    icon: Icon(FontAwesomeIcons.cameraRetro),
                                     iconSize: 26.0,
                                     color: Colors.blueGrey[500],
                                     splashColor: Colors.lightBlue[100],
@@ -287,6 +438,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                 ),
               ),
+            ),
+          ),
+          Positioned(
+            top: 30.0,
+            left: 10.0,
+            child: IconButton(
+              icon: Icon(Icons.keyboard_arrow_down),
+              color: Colors.black,
+              iconSize:37.0,
+              onPressed: () => Navigator.pop(context, itemList),
             ),
           ),
         ],

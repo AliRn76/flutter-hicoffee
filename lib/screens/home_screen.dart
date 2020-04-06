@@ -33,6 +33,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+
+
   void updateAllList()async{
     print("**************************TRYING OT UPDATE");
     List<Item> items;
@@ -49,6 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
           items[i].image_url = "/$i-image.jpg";
         }
       }
+      widget.all_items.clear();
+      for(int i=0 ; i<items.length ; i++){
+        widget.all_items.add(items[i]);
+      }
     }
     on Exception{
       // Try Every 1 Sec, For Connecting To Server
@@ -58,13 +64,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //    setState(() {
 //    var result = await DatabaseHelper().selectItems();
-      widget.all_items.clear();
-      for(int i=0 ; i<items.length ; i++){
-        widget.all_items.add(items[i]);
-      }
+
 //    });
   }
 
+  void goToAddItemScreen() async{
+    var result = await Navigator.push(
+      context,
+      SlideBottomRoute(page: AddItemScreen()),
+    );
+    for(int i=0 ; i<result.length ; i++){
+      setState(() {
+        widget.all_items.add(result[i]);
+        print(result[i].name);
+      });
+    }
+  }
+
+  void goToItemScreen(Item item) async{
+    var result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ItemScreen(item: item)),
+    );
+    if(result != null){
+      if(result[0] == "x"){
+        Item item;
+        String itemName = result[1];
+        for(int i=0 ; i<widget.all_items.length ; i++){
+          if(widget.all_items[i].name == itemName){
+            item = widget.all_items[i];
+          }
+        }
+        widget.all_items.remove(item);
+      }
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -153,11 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index){
                     Item item = widget.all_items[index];
-                    return GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ItemScreen(item: item)),
-                      ),
+                    return GestureDetector (
+                      onTap: () => goToItemScreen(item),
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 10.0),
                         child: Container(
@@ -248,7 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment(0, 1.07),
               child: CustomPaint(
                 painter: TrianglePainter(
-                  strokeColor: Colors.green,
+                  strokeColor: Colors.lightGreenAccent[700],
+//                  strokeColor: Colors.green,
                   strokeWidth: 10,
                   paintingStyle: PaintingStyle.fill,
                 ),
@@ -261,10 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Align(
               alignment: Alignment(0, 1.07),
               child: FlatButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  SlideBottomRoute(page: AddItemScreen()),
-                ),
+                onPressed: () => goToAddItemScreen(),
                 child: CustomPaint(
                   painter: TrianglePainter(
                     strokeColor: Colors.black,

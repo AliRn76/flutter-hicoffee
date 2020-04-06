@@ -124,7 +124,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
             }
         );
       }
-    }else {
+    }
+    else {
       Navigator.of(context).pop(true);
 //      Navigator.pop(context, () {
 //                  setState(() {});
@@ -173,7 +174,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 );
               }
           );
-        }else{
+        }
+        else{
           showDialog(
               context: context,
               builder: (context) {

@@ -1,10 +1,13 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:ui';
+import 'dart:io';
+
 
 import 'package:hicoffee2/sqlite/database_helper.dart';
 import 'package:hicoffee2/models/item_model.dart';
@@ -27,6 +30,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
   TextEditingController description = TextEditingController();
   String image_url;
   String category;
+  File imageSource;
   int _currentValue;
   int number = 1;
   bool condition = false;
@@ -43,13 +47,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     _currentValue = widget.item.number;
   }
 
-
   void _updateItem() async{
-//    widget.item.name = nameController.text;
-//    widget.item.price =  int.parse(priceController.text);
-//    number = number;
-//    widget.item.description =  description.text;
-//    widget.item.image_url =  image_url;
     if (nameController.text == widget.item.name){
       checkName = false;
     }else{
@@ -224,6 +222,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
         }
         // Collect Data Again
         Future.delayed(Duration(milliseconds: 700), () {
+          Navigator.of(context).pop(true);
           editItem(myBody);
         });
       }
@@ -262,16 +261,32 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
   }
 
-
   void editItem(Map<String, dynamic> myBody)async{
     //‌ If HTTP Header Was 'OK' Update item it on local database
+    Item item;
     if(condition){
-      Item item = Item.fromJson(myBody);
+//      item = Item.fromJson(myBody);
       var result = await DatabaseHelper().updateItem(item, widget.item.name);
-      print("****************Update Result: $result");
+      print("Update Result: $result");
     }
-    Navigator.pop(context, 'Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!Nope!');
-//    Navigator.of(context).pop(true);
+//    Navigator.pop(context, item);
+    Navigator.of(context).pop(true);
+  }
+
+  _takeImageGallery() async{
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imageSource = picture;
+    });
+//    Navigator.of(context).pop();
+  }
+
+  _takeImageCamera() async{
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      imageSource = picture;
+    });
+//    Navigator.of(context).pop();
   }
 
   @override
@@ -454,11 +469,45 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     },
                                   ),
                                   IconButton(
-                                    icon: Icon(FontAwesomeIcons.image),
+                                    icon: Icon(FontAwesomeIcons.cameraRetro),
                                     iconSize: 26.0,
                                     color: Colors.blueGrey[500],
                                     splashColor: Colors.lightBlue[100],
-                                    onPressed: (){print("ADD IMAGE");},
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return BackdropFilter(
+                                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                              child: AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                  side: BorderSide(color: Colors.black87),
+                                                ),
+                                                title: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                  children: <Widget>[
+                                                    IconButton(
+                                                      icon: Icon(FontAwesomeIcons.camera),
+                                                      iconSize: 33.0,
+                                                      color: Colors.blueGrey[500],
+                                                      splashColor: Colors.lightBlue[300],
+                                                      onPressed: () => _takeImageCamera(),
+                                                    ),
+                                                    IconButton(
+                                                      icon: Icon(FontAwesomeIcons.image),
+                                                      iconSize: 33.0,
+                                                      color: Colors.blueGrey[500],
+                                                      splashColor: Colors.lightBlue[100],
+                                                      onPressed: () => _takeImageGallery(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                      );
+                                    },
                                   ),
                                 ],
                               ),

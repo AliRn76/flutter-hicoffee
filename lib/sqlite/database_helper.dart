@@ -140,6 +140,7 @@ class DatabaseHelper{
       names.add(result[i]["Name"]);
     }
     for(int i=0 ; i<names.length ; i++){
+//      print("Name: $name        Name[i]: ${names[i]}");
       if (name == names[i]) {
         condi = true;
       }
