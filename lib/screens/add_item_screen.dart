@@ -1,16 +1,17 @@
 
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hicoffee2/models/item_model.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:ui';
+import 'dart:io';
 
 import 'package:hicoffee2/sqlite/database_helper.dart';
-
+import 'package:hicoffee2/models/item_model.dart';
 
 
 class AddItemScreen extends StatefulWidget {
@@ -24,10 +25,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
   TextEditingController description = TextEditingController();
   String dropdownValue = "ماگ";
   List<Item> itemList = [];
+
   Color responseColor;
   String responseText;
   String category = "ماگ";
   bool sendCheck = true;
+  File imageSource;
   int number = 2;
 
 
@@ -290,6 +293,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
   }
 
+  _takeImageGallery() async{
+    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imageSource = picture;
+    });
+//    Navigator.of(context).pop();
+  }
+
+  _takeImageCamera() async{
+    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      imageSource = picture;
+    });
+//    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -426,7 +444,41 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                     iconSize: 26.0,
                                     color: Colors.blueGrey[500],
                                     splashColor: Colors.lightBlue[100],
-                                    onPressed: (){print("ADD IMAGE");},
+                                    onPressed: (){
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return BackdropFilter(
+                                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                              child: AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(30.0),
+                                                  side: BorderSide(color: Colors.black87),
+                                                ),
+                                                title: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                  children: <Widget>[
+                                                    IconButton(
+                                                      icon: Icon(FontAwesomeIcons.camera),
+                                                      iconSize: 33.0,
+                                                      color: Colors.blueGrey[500],
+                                                      splashColor: Colors.lightBlue[300],
+                                                      onPressed: () => _takeImageCamera(),
+                                                    ),
+                                                    IconButton(
+                                                      icon: Icon(FontAwesomeIcons.image),
+                                                      iconSize: 33.0,
+                                                      color: Colors.blueGrey[500],
+                                                      splashColor: Colors.lightBlue[100],
+                                                      onPressed: () => _takeImageGallery(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
