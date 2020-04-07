@@ -243,9 +243,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
     // Add it on list for response back
     itemList.add(item);
-    setState(() {
-      Navigator.maybePop(context, itemList);
-    });
+    await Navigator.maybePop(context, itemList);
     print("Insert Result: $result");
   }
 

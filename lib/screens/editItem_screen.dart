@@ -1,5 +1,6 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hicoffee2/widgets/item_detail.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -265,7 +266,10 @@ class _EditItemScreenState extends State<EditItemScreen> {
     //‌ If HTTP Header Was 'OK' Update item it on local database
     Item item;
     if(condition){
-//      item = Item.fromJson(myBody);
+      item = Item.fromJson(myBody);
+//      setState(() {
+//        ItemDetail(item: item);
+//      });
       var result = await DatabaseHelper().updateItem(item, widget.item.name);
       print("Update Result: $result");
     }

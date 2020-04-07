@@ -65,18 +65,6 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
 
-//  void goToEditItemScreen(Item item) async{
-//    var result = await Navigator.push(
-//      context,
-//      MaterialPageRoute(builder: (context) => EditItemScreen(item: widget.item)),
-//    );
-//    print(result);
-//    print(result.name);
-//    if(result != null){
-//      widget.item = result;
-//    }
-//  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -201,13 +189,15 @@ class _ItemDetailState extends State<ItemDetail> {
     } else {
       return Column(
         children: <Widget>[
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
 //                  IconButton(
 //                  color: Colors.grey[600],
 //                    iconSize: 23.0,
@@ -216,31 +206,32 @@ class _ItemDetailState extends State<ItemDetail> {
 //                      goToEditItemScreen(widget.item);
 //                    },
 //                  ),
-                  EditItemScreen(item: widget.item),
-                  Flexible(
-                    child: Container(
-                      height: 25.0,
-                      child: Marquee(
-                        text: widget.item.name,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          fontFamily: "BNazanin",
-                          fontWeight: FontWeight.w600,
+                    EditItemScreen(item: widget.item),
+                    Flexible(
+                      child: Container(
+                        height: 25.0,
+                        child: Marquee(
+                          text: widget.item.name,
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontFamily: "BNazanin",
+                            fontWeight: FontWeight.w600,
+                          ),
+                          scrollAxis: Axis.horizontal,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          blankSpace: MediaQuery.of(context).size.width-150,
+                          pauseAfterRound: Duration(seconds: 8),
+                          startPadding: 10.0,
+                          accelerationDuration: Duration(seconds: 1),
+                          accelerationCurve: Curves.linear,
+                          decelerationDuration: Duration(milliseconds: 500),
+                          decelerationCurve: Curves.easeOut,
                         ),
-                        scrollAxis: Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        blankSpace: MediaQuery.of(context).size.width-150,
-                        pauseAfterRound: Duration(seconds: 8),
-                        startPadding: 10.0,
-                        accelerationDuration: Duration(seconds: 1),
-                        accelerationCurve: Curves.linear,
-                        decelerationDuration: Duration(milliseconds: 500),
-                        decelerationCurve: Curves.easeOut,
                       ),
                     ),
-                  ),
-                  DeleteItemScreen(item: widget.item),
-                ],
+                    DeleteItemScreen(item: widget.item),
+                  ],
+                ),
               ),
             ),
           ),
@@ -249,13 +240,13 @@ class _ItemDetailState extends State<ItemDetail> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 10.0),
+                margin: EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 10.0),
                 decoration: BoxDecoration(
                   color: Colors.pink[100],
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -279,13 +270,13 @@ class _ItemDetailState extends State<ItemDetail> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0),
+                margin: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 10.0),
                 decoration: BoxDecoration(
                   color: Colors.lightBlue[100],
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -315,9 +306,9 @@ class _ItemDetailState extends State<ItemDetail> {
             child: Row(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                  margin: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
 //                  height: 100.0,
-                  width: MediaQuery.of(context).size.width - 20,
+                  width: MediaQuery.of(context).size.width - 40,
                   decoration: BoxDecoration(
                     color: Colors.black12,
                     borderRadius: BorderRadius.circular(20.0),

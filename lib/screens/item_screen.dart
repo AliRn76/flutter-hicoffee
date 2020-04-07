@@ -1,6 +1,7 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hicoffee2/screens/editItem_screen.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +29,10 @@ class _ItemScreenState extends State<ItemScreen> {
 
   int _currentValue = 1;
   bool condition = false;
+  bool sendCheck = true;
 
   void sellItem() async{
+    sendCheck = false;
     try{
       Map<String, dynamic> myBody = {
         "number": _currentValue,
@@ -42,6 +45,7 @@ class _ItemScreenState extends State<ItemScreen> {
 
       if(response.statusCode == 200){
         condition = true;
+        sendCheck = true;
         showDialog(
             context: context,
             builder: (context) {
@@ -71,6 +75,7 @@ class _ItemScreenState extends State<ItemScreen> {
             }
         );
       }else{
+        sendCheck = true;
         showDialog(
             context: context,
             builder: (context) {
@@ -108,6 +113,7 @@ class _ItemScreenState extends State<ItemScreen> {
     }
     on Exception catch (exception){
       print(exception);
+      sendCheck = true;
       showDialog(
           context: context,
           builder: (context) {
@@ -144,12 +150,17 @@ class _ItemScreenState extends State<ItemScreen> {
     //‌ If HTTP Header Was 'OK' Update item it on local database
     if(condition){
       Item item = Item.fromJson(myBody);
+      setState(() {
+        widget.item.number = (widget.item.number - _currentValue);
+        ItemDetail(item: widget.item);
+      });
       var result = await DatabaseHelper().updateItem(item, widget.item.name);
       print("Sold Result: $result");
     }
 //    Navigator.pop(context, item)
     Navigator.of(context).pop(true);
   }
+
   _sellButton(int number){
     // Age Az Oon jens Mojood Nabood
     if(number == 0 || number == null){
