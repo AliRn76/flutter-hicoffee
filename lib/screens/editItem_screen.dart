@@ -277,7 +277,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     Navigator.of(context).pop(true);
   }
 
-  _takeImageGallery() async{
+  void _takeImageGallery() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       imageSource = picture;
@@ -285,12 +285,47 @@ class _EditItemScreenState extends State<EditItemScreen> {
 //    Navigator.of(context).pop();
   }
 
-  _takeImageCamera() async{
+  void _takeImageCamera() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       imageSource = picture;
+
     });
-//    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+  }
+
+  void _upload() {
+    if (imageSource == null) return;
+    String base64Image = base64Encode(imageSource.readAsBytesSync());
+    String fileName = imageSource.path.split("/").last;
+
+    print(base64Image);
+    print(fileName);
+//    post(phpEndPoint, body: {
+//      "image": base64Image,
+//      "name": fileName,
+//    }).then((res) {
+//      print(res.statusCode);
+//    }).catchError((err) {
+//      print(err);
+//    });
+  }
+
+  _imageBuilder(){
+    _upload();
+    if (imageSource == null){
+      return Text(
+        " ",
+      );
+    }else{
+      print(imageSource);
+     return Image.file(
+       imageSource,
+       height: 100.0,
+       width: 100.0,
+       fit: BoxFit.cover,
+     );
+    }
   }
 
   @override
@@ -496,8 +531,9 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                                       iconSize: 33.0,
                                                       color: Colors.blueGrey[500],
                                                       splashColor: Colors.lightBlue[300],
-                                                      onPressed: () => _takeImageCamera(),
+                                                      onPressed: () =>  _takeImageCamera(),
                                                     ),
+                                                    _imageBuilder(),
                                                     IconButton(
                                                       icon: Icon(FontAwesomeIcons.image),
                                                       iconSize: 33.0,
