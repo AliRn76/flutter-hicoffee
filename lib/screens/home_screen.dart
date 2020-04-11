@@ -244,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Positioned(
                                 left: 10.0,
                                 bottom: 100,
-                                child: Hero(
+                                child:  Hero(
                                   tag: item.image_url,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20.0),

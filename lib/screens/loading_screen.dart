@@ -20,7 +20,6 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   List<Item> items;
-
   // Take Items
   void takeItems()async{
     try{

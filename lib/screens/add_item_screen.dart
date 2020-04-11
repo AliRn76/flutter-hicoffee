@@ -1,10 +1,12 @@
 
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
+import 'package:loading/indicator/ball_scale_multiple_indicator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading/loading.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'dart:ui';
@@ -32,7 +34,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
   bool sendCheck = true;
   File imageSource;
   int number = 2;
-
+  Color goodColor = Colors.greenAccent[700];
+  Color badColor = Colors.redAccent[700];
 
   bool itemNameController(String name){
     // False mean you can use that name
@@ -76,6 +79,44 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     color: responseColor,
                   ),
                 ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  _showLoadingDialog(){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(color: Colors.black87),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Loading(
+                      indicator: BallScaleMultipleIndicator(),
+                      size: 60.0,
+                      color: Colors.blue[300],
+                  ),
+                  Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Text(
+                      "در حال ارسال اطلاعات . . .",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: "BNazanin",
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
@@ -133,7 +174,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             fontFamily: "BNazanin",
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
-                            color: Colors.greenAccent[700],
+                            color: goodColor,
                           ),
                         ),
                         onPressed: () {
@@ -202,23 +243,48 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 
-  Future<Response> sendPostRequest() async{
+  Future<StreamedResponse> sendPostRequest() async{
     try{
+      String image_url;
+      String url = "http://al1.best:89/api/add-item/";
+
+      if(imageSource != null){
+        image_url = imageSource.path;
+      }else{
+        image_url = null;
+      }
+      // Create a request
+      var request = MultipartRequest('POST', Uri.parse(url));
+
+      // Add Request Body
+      if(image_url != null){
+        request.files.add(
+            await MultipartFile.fromPath(
+                'image_url',
+                image_url
+            )
+        );
+      }
+      request.fields['name'] = nameController.text;
+      request.fields['category'] = category;
+      request.fields['number'] = number.toString();
+      request.fields['price'] = priceController.text;
+      request.fields['description'] = description.text;
+
       Map<String, dynamic> myBody = {
         "name": nameController.text,
         "category": category,
         "number": number,
         "price": int.parse(priceController.text),
         "description": description.text,
-        "image_url": "default.jpg",
+        "image_url": image_url,
       };
-      String jsonBody = jsonEncode(myBody);
-
-      Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
-
-      Response response = await post("http://al1.best:89/api/add-item/", body: jsonBody, headers: reqHeader);
-
+      final response = await request.send();
+      print(response.statusCode);
+      final respStr = await response.stream.bytesToString();
+      print("res: $respStr");
       print("statusCode: ${response.statusCode}");
+
       // Insert it on local db
       if (response.statusCode == 200){
         insertItem(myBody);
@@ -229,7 +295,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
     on Exception catch (exception){
       print("Exception: $exception");
       responseText = 'خطا';
-      responseColor = Colors.redAccent[700];
+      responseColor = badColor;
       _showResponseDialog(responseText, responseColor);
       return null;
     }
@@ -243,7 +309,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
     // Add it on list for response back
     itemList.add(item);
-    await Navigator.maybePop(context, itemList);
+//    await Navigator.maybePop(context, itemList);
     print("Insert Result: $result");
   }
 
@@ -255,26 +321,28 @@ class _AddItemScreenState extends State<AddItemScreen> {
     if(itemNameController(nameController.text) || itemPriceController(priceController.text) || checkName){
       if(checkName){
         responseText = '.نام محصول تکراری است';
-        responseColor = Colors.redAccent[700];
+        responseColor = badColor;
 
       }else if(itemNameController(nameController.text)){
         responseText = '.نام محصول را پر کنید';
-        responseColor = Colors.redAccent[700];
+        responseColor = badColor;
 
       }else{
         responseText = '.قیمت را پر کنید';
-        responseColor = Colors.redAccent[700];
+        responseColor = badColor;
       }
       _showResponseDialog(responseText, responseColor);
       sendCheck = true;
 
     }else{
-      Response response = await sendPostRequest();
+      _showLoadingDialog();
+      StreamedResponse response = await sendPostRequest();
 
       if(response != null){
+        Navigator.of(context).pop();
         if(response.statusCode == 200){
           responseText = 'ثبت شد';
-          responseColor = Colors.greenAccent[700];
+          responseColor = goodColor;
           setState(() {
             nameController = TextEditingController();
             priceController = TextEditingController();
@@ -283,7 +351,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
         }else{
           responseText = '${response.statusCode} خطا ';
-          responseColor = Colors.redAccent[700];
+          responseColor = badColor;
         }
         _showResponseDialog(responseText, responseColor);
       }
@@ -295,16 +363,42 @@ class _AddItemScreenState extends State<AddItemScreen> {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       imageSource = picture;
+      Navigator.of(context).pop();
+      if(imageSource != null){
+        _showResponseDialog("عکس ثبت شد",goodColor);
+      }
     });
-//    Navigator.of(context).pop();
   }
 
   _takeImageCamera() async{
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       imageSource = picture;
+      Navigator.of(context).pop();
+      if(imageSource != null){
+        _showResponseDialog("عکس ثبت شد",goodColor);
+      }
     });
-//    Navigator.of(context).pop();
+
+  }
+
+  _imageBuilder(){
+    if (imageSource == null){
+      return Text(
+        "Image Not Found",
+        style: TextStyle(
+          fontSize: 10.0,
+        ),
+      );
+    }else{
+      print(imageSource);
+      return Image.file(
+        imageSource,
+        height: 100.0,
+        width: 100.0,
+        fit: BoxFit.cover,
+      );
+    }
   }
 
   @override
@@ -463,6 +557,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                                       splashColor: Colors.lightBlue[300],
                                                       onPressed: () => _takeImageCamera(),
                                                     ),
+                                                    _imageBuilder(),
                                                     IconButton(
                                                       icon: Icon(FontAwesomeIcons.image),
                                                       iconSize: 33.0,

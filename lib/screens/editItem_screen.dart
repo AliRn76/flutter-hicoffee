@@ -294,36 +294,44 @@ class _EditItemScreenState extends State<EditItemScreen> {
     Navigator.of(context).pop();
   }
 
-  void _upload() {
-    if (imageSource == null) return;
-    String base64Image = base64Encode(imageSource.readAsBytesSync());
-    String fileName = imageSource.path.split("/").last;
-
-    print(base64Image);
-    print(fileName);
-//    post(phpEndPoint, body: {
-//      "image": base64Image,
-//      "name": fileName,
-//    }).then((res) {
-//      print(res.statusCode);
-//    }).catchError((err) {
-//      print(err);
-//    });
-  }
+  // Test bood
+  void uploadImage() async {
+    String url = "http://al1.best:89/api/test/";
+    String filename = imageSource.path;
+    print("filename path: $filename");
+    var request = MultipartRequest('POST', Uri.parse(url));
+    request.files.add(
+      await MultipartFile.fromPath(
+        'image_url',
+        filename
+      )
+    );
+    request.fields['name'] = 'test 2';
+  final res = await request.send();
+  final respStr = await res.stream.bytesToString();
+  print("res: $respStr");
+}
 
   _imageBuilder(){
-    _upload();
     if (imageSource == null){
       return Text(
-        " ",
+        "Not Working",
+        style: TextStyle(
+          fontSize: 15.0,
+        ),
       );
     }else{
       print(imageSource);
-     return Image.file(
-       imageSource,
-       height: 100.0,
-       width: 100.0,
-       fit: BoxFit.cover,
+     return GestureDetector(
+       onTap: (){
+//         uploadImage();
+       },
+       child: Image.file(
+         imageSource,
+         height: 100.0,
+         width: 100.0,
+         fit: BoxFit.cover,
+       ),
      );
     }
   }
