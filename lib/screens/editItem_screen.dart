@@ -44,7 +44,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     nameController = TextEditingController(text: widget.item.name);
     priceController = TextEditingController(text: widget.item.price.toString());
     description = TextEditingController(text: widget.item.description);
-    image_url = widget.item.image_url;
+//    image_url = widget.item.image_url;
     _currentValue = widget.item.number;
   }
 
@@ -155,16 +155,17 @@ class _EditItemScreenState extends State<EditItemScreen> {
           "number": number,
           "price": int.parse(priceController.text),
           "description": description.text,
-          "image_url": image_url,
+//          "image_url": image_url,
         };
         String jsonBody = jsonEncode(myBody);
 
         Map<String, String> reqHeader = {"Content-type": "application/json", "Accept": "application/json"};
 
         Response response = await put("http://al1.best:89/api/edit-item/", body: jsonBody, headers: reqHeader);
+        print(response.body);
 
         // Show Response Message
-        if(response.statusCode == 200){
+        if(response.statusCode == 202){
           condition = true;
           showDialog(
               context: context,
@@ -195,35 +196,32 @@ class _EditItemScreenState extends State<EditItemScreen> {
           showDialog(
               context: context,
               builder: (context) {
-                Future.delayed(Duration(milliseconds: 700), () {
-                  Navigator.of(context).pop(true);
-                });
-                return BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      side: BorderSide(color: Colors.black87),
-                    ),
-                    title: Center(
-                      child: Text(
-                        '${response.statusCode} خطا ',
-                        style: TextStyle(
-                          fontFamily: "BNazanin",
-                          fontSize: 23.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.redAccent[700],
-                        ),
+              return BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black87),
+                  ),
+                  title: Center(
+                    child: Text(
+                      '${response.statusCode} خطا ',
+                      style: TextStyle(
+                        fontFamily: "BNazanin",
+                        fontSize: 23.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent[700],
                       ),
                     ),
                   ),
-                );
+                ),
+              );
               }
           );
         }
         // Collect Data Again
         Future.delayed(Duration(milliseconds: 700), () {
-          Navigator.of(context).pop(true);
+          Navigator.of(context).pop();
           editItem(myBody);
         });
       }
@@ -233,7 +231,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
             context: context,
             builder: (context) {
               Future.delayed(Duration(milliseconds: 700), () {
-                Navigator.of(context).pop(true);
+                Navigator.of(context).pop();
               });
               return BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -274,7 +272,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
       print("Update Result: $result");
     }
 //    Navigator.pop(context, item);
-    Navigator.of(context).pop(true);
+    Navigator.of(context).pop();
   }
 
   void _takeImageGallery() async{
@@ -295,22 +293,22 @@ class _EditItemScreenState extends State<EditItemScreen> {
   }
 
   // Test bood
-  void uploadImage() async {
-    String url = "http://al1.best:89/api/test/";
-    String filename = imageSource.path;
-    print("filename path: $filename");
-    var request = MultipartRequest('POST', Uri.parse(url));
-    request.files.add(
-      await MultipartFile.fromPath(
-        'image_url',
-        filename
-      )
-    );
-    request.fields['name'] = 'test 2';
-  final res = await request.send();
-  final respStr = await res.stream.bytesToString();
-  print("res: $respStr");
-}
+//  void uploadImage() async {
+//    String url = "http://al1.best:89/api/test/";
+//    String filename = imageSource.path;
+//    print("filename path: $filename");
+//    var request = MultipartRequest('POST', Uri.parse(url));
+//    request.files.add(
+//      await MultipartFile.fromPath(
+//        'image_url',
+//        filename
+//      )
+//    );
+//    request.fields['name'] = 'test 2';
+//  final res = await request.send();
+//  final respStr = await res.stream.bytesToString();
+//  print("res: $respStr");
+//}
 
   _imageBuilder(){
     if (imageSource == null){

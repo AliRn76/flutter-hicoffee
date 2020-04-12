@@ -14,6 +14,7 @@ class CategoryScreen extends StatefulWidget {
   // Catch Category
   final String category;
   final List<Item> items;
+  int i;
   CategoryScreen({this.category, this.items});
 
   @override
@@ -132,6 +133,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
           items[i].image_url = "/$i-image.jpg";
         }
       }
+      if(!mounted){
+        return;
+      }
+      setState(() {
+        widget.items.clear();
+        for(int i=0 ; i<items.length ; i++){
+          widget.items.add(items[i]);
+        }
+      });
     }
     on Exception{
       // Try Every 1 Sec, For Connecting To Server
@@ -139,17 +149,20 @@ class _CategoryScreenState extends State<CategoryScreen> {
       updateAllList();
     }
 
-    setState(() {
-      widget.items.clear();
-      for(int i=0 ; i<items.length ; i++){
-        widget.items.add(items[i]);
-      }
-    });
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    updateAllList();
+    Future.delayed(Duration(seconds: 3),(){
+      print("* Refresh Category Screen");
+      updateAllList();
+    });
     return Scaffold(
       appBar: AppBar(
         title: Row(

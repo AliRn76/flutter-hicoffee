@@ -22,7 +22,7 @@ import 'package:hicoffee2/models/item_model.dart';
 class HomeScreen extends StatefulWidget {
 
   List<Item> all_items ;
-
+  int i;
   HomeScreen({
     this.all_items,
   });
@@ -34,9 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
 
-
   void updateAllList()async{
-    print("**************************TRYING OT UPDATE");
     List<Item> items;
     try{
       Response response = await get("http://al1.best:89/api/show-all-items/");
@@ -51,21 +49,20 @@ class _HomeScreenState extends State<HomeScreen> {
           items[i].image_url = "/$i-image.jpg";
         }
       }
+      if(!mounted){
+        return;
+      }
       widget.all_items.clear();
       for(int i=0 ; i<items.length ; i++){
         widget.all_items.add(items[i]);
       }
     }
-    on Exception{
+    on Exception catch(e){
+      print("*Error: $e");
       // Try Every 1 Sec, For Connecting To Server
       Future.delayed(Duration(seconds: 1));
       updateAllList();
     }
-
-//    setState(() {
-//    var result = await DatabaseHelper().selectItems();
-
-//    });
   }
 
   void goToAddItemScreen() async{
@@ -73,11 +70,13 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       SlideBottomRoute(page: AddItemScreen()),
     );
-    for(int i=0 ; i<result.length ; i++){
-      setState(() {
-        widget.all_items.add(result[i]);
-        print(result[i].name);
-      });
+    if(result != null){
+      for(int i=0 ; i<result.length ; i++){
+        setState(() {
+          widget.all_items.add(result[i]);
+          print(result[i].name);
+        });
+      }
     }
   }
 
@@ -99,16 +98,18 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
   }
+
   @override
   void initState() {
     super.initState();
-    print("****************************INTI STATE");
   }
 
   @override
   Widget build(BuildContext context){
-    print("I AM IN HOME SCREEN");
-    updateAllList();
+    Future.delayed(Duration(seconds: 4),(){
+      print("* Refresh Home Screen");
+      updateAllList();
+    });
     return Scaffold(
       body: SafeArea(
         child: ListView(

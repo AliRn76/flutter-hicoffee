@@ -315,6 +315,7 @@ class _ItemScreenState extends State<ItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+//    updateItem();
     return Scaffold(
       body: Column(
         children: <Widget>[
