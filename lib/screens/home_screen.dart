@@ -10,8 +10,6 @@ import 'dart:ui';
 import 'package:hicoffee2/animations/slide_top_route.dart';
 import 'package:hicoffee2/animations/slide_bottom_route.dart';
 import 'package:hicoffee2/widgets/triangle_painter.dart';
-//import 'package:hicoffee2/sqlite/database_helper.dart';
-//import 'package:hicoffee2/screens/addItem_screen.dart';
 import 'package:hicoffee2/screens/add_item_screen.dart';
 import 'package:hicoffee2/screens/chart_screen.dart';
 import 'package:hicoffee2/screens/item_screen.dart';

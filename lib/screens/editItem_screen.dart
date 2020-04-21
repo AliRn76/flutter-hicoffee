@@ -257,7 +257,6 @@ class _EditItemScreenState extends State<EditItemScreen> {
         );
       }
     }
-
   }
 
   void editItem(Map<String, dynamic> myBody)async{
